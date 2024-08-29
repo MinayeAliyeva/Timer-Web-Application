@@ -2,76 +2,63 @@ import * as React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
-export default function TimerList() {
+export default function TimeList() {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                sx={{ color: "text.primary", display: "inline" }}
-              >
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
-          }
-        />
+    <List sx={{ width: "100%", bgcolor: "#000", color: "#fff" }}>
+      <ListItem alignItems="flex-start" sx={{ paddingY: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{ fontWeight: "bold", fontSize: 18, color: "#FF9500" }}
+            >
+              Baku
+            </Typography>
+            <Typography sx={{ color: "#A9A9A9" }}>GMT+4</Typography>
+          </Box>
+          <Box sx={{ textAlign: "right" }}>
+            <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+              12:45
+            </Typography>
+            <Typography sx={{ color: "#A9A9A9" }}>Gece</Typography>
+          </Box>
+        </Box>
       </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                sx={{ color: "text.primary", display: "inline" }}
-              >
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
+      <Divider component="li" sx={{ bgcolor: "#333" }} />
+
+      <ListItem alignItems="flex-start" sx={{ paddingY: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{ fontWeight: "bold", fontSize: 18, color: "#FF9500" }}
+            >
+              New York
+            </Typography>
+            <Typography sx={{ color: "#A9A9A9" }}>GMT-4</Typography>
+          </Box>
+          <Box sx={{ textAlign: "right" }}>
+            <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+              08:45
+            </Typography>
+            <Typography sx={{ color: "#A9A9A9" }}>Gündüz</Typography>
+          </Box>
+        </Box>
       </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                sx={{ color: "text.primary", display: "inline" }}
-              >
-                Sandra Adams
-              </Typography>
-              {" — Do you have Paris recommendations? Have you ever…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
+      <Divider component="li" sx={{ bgcolor: "#333" }} />
     </List>
   );
 }
