@@ -18,11 +18,11 @@ export default function Header() {
           justifyContent: "space-around",
         }}
       >
-        <Typography sx={{ minWidth: 100 }}>Duzenle</Typography>
+        <Typography sx={{ minWidth: 100,fontWeight:'bold',fontSize:'20px',color:"#FF9500" }}>Duzenle</Typography>
 
         <IconButton>
           {" "}
-          <HiPlus />
+          <HiPlus style={{color:'#FF9500',fontSize:'30px' }} />
         </IconButton>
       </Box>
     </React.Fragment>
