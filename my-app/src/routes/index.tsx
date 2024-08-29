@@ -15,6 +15,7 @@ export const routes: MyRouterObject[] = [
       {
         index: true,
         element: <TimeZones />,
+        path:"/timezone"
       },
       {
         path: "/alarm",
