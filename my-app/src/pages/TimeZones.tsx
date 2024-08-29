@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
 const TimeZones = () => {
-  return (
-    <div>TimeZones</div>
-  )
-}
 
-export default TimeZones
+
+
+  return (
+    <div>
+
+    </div>
+  );
+};
+
+export default TimeZones;
