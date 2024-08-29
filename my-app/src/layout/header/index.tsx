@@ -24,7 +24,15 @@ export default function Header() {
       >
         Düzenle
       </Typography>
-
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          fontSize: "20px",
+          color: "#fff", // Beyaz renk
+        }}
+      >
+        Saatler
+      </Typography>
       <IconButton>
         <HiPlus style={{ color: "#FF9500", fontSize: "30px" }} />
       </IconButton>
