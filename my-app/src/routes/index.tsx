@@ -4,7 +4,8 @@ import AlarmClock from "../pages/AlarmClock";
 import Chronometer from "../pages/Chronometer";
 import Counter from "../pages/Counter";
 import TimeZones from "../pages/TimeZones";
-import { MyRouterObject } from "../types";
+import { MyRouterObject } from "../modules";
+import AlarmTest from "../test/alarm";
 
 export const routes: MyRouterObject[] = [
   {
@@ -20,13 +21,17 @@ export const routes: MyRouterObject[] = [
         element: <AlarmClock />,
       },
       {
-        path: "chronometer",
+        path: "/chronometer",
         element: <Chronometer />,
       },
       {
-        path: "ounter",
+        path: "/counter",
         element: <Counter />,
       },
+      {
+        path:"/test",
+        element:<AlarmTest/>
+      }
     ],
   },
 ];
