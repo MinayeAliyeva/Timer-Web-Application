@@ -13,6 +13,9 @@ import TimeDrawer from "./TimeDrawer";
 export default function TimeList() {
   const [timeList, setTimeList] = React.useState<TTimeList[]>([]);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [filteredTimeList, setFilteredTimeList] = React.useState<TTimeList[]>(
+    []
+  );
 
   const updateTimeList = () => {
     setTimeList((prevList) =>
@@ -49,11 +52,29 @@ export default function TimeList() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const findCity = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.toLowerCase();
+    if (inputValue) {
+      const newTimeList = timeList?.filter((timeZone) =>
+        timeZone.city.split("/")[1]?.toLowerCase().includes(inputValue)
+      );
+      setFilteredTimeList(newTimeList);
+    } else {
+      setFilteredTimeList([]);
+    }
+  };
+
+  const displayedTimeList =
+    filteredTimeList?.length > 0 ? filteredTimeList : timeList;
+
   return (
     <>
       <Button variant="contained" onClick={toggleDrawer(true)}>
         Zaman Dilimi Seç
       </Button>
+      <br />
+      <br />
+      <input onChange={findCity} placeholder="Şehir Ara" />
       <TimeDrawer
         drawerOpen={drawerOpen}
         toggleDrawer={toggleDrawer}
@@ -61,35 +82,41 @@ export default function TimeList() {
       />
       <DefaultClock />
       <List sx={{ width: "100%", bgcolor: "#000", color: "#fff" }}>
-        {timeList?.map((timeData) => (
-          <ListItem
-            alignItems="flex-start"
-            key={timeData.city}
-            sx={{ paddingY: 2 }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <Box>
-                <Typography
-                  sx={{ fontWeight: "bold", fontSize: 18, color: "#FF9500" }}
+        {displayedTimeList.length
+          ? displayedTimeList?.map((timeData) => (
+              <ListItem
+                alignItems="flex-start"
+                key={timeData.city}
+                sx={{ paddingY: 2 }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
                 >
-                  {timeData?.city}
-                </Typography>
-              </Box>
-              <Box sx={{ textAlign: "right" }}>
-                <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                  {timeData?.time}
-                </Typography>
-              </Box>
-            </Box>
-            <Divider />
-          </ListItem>
-        ))}
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: 18,
+                        color: "#FF9500",
+                      }}
+                    >
+                      {timeData?.city}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ textAlign: "right" }}>
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      {timeData?.time}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Divider />
+              </ListItem>
+            ))
+          : "Dunya saati yok "}
       </List>
     </>
   );
