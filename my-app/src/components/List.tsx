@@ -1,13 +1,11 @@
 import * as React from "react";
-import { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-import { getCurrentTime, timeZones } from "../constants";
+import { getCurrentTime } from "../constants";
 import { TTimeList } from "../modules";
 import DefaultClock from "./DefaultClock";
 import TimeDrawer from "./TimeDrawer";
@@ -26,16 +24,20 @@ export default function TimeList() {
   };
 
   const handleTimeZoneClick = (timeZone: string, cityName: string) => {
-    const currentTime = getCurrentTime(timeZone);
-
-    setTimeList((prevList) => [
-      ...prevList,
-      {
-        city: cityName,
-        time: currentTime,
-      },
-    ]);
-    setDrawerOpen(false);
+    const cityExists = timeList?.some(
+      (timeZone) => timeZone?.city === cityName
+    );
+    if (!cityExists) {
+      const currentTime = getCurrentTime(timeZone);
+      setTimeList((prevList) => [
+        ...prevList,
+        {
+          city: cityName,
+          time: currentTime,
+        },
+      ]);
+      setDrawerOpen(false);
+    }
   };
 
   const toggleDrawer = (open: boolean) => () => {
@@ -52,7 +54,11 @@ export default function TimeList() {
       <Button variant="contained" onClick={toggleDrawer(true)}>
         Zaman Dilimi Seç
       </Button>
-    <TimeDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} handleTimeZoneClick={handleTimeZoneClick} />
+      <TimeDrawer
+        drawerOpen={drawerOpen}
+        toggleDrawer={toggleDrawer}
+        handleTimeZoneClick={handleTimeZoneClick}
+      />
       <DefaultClock />
       <List sx={{ width: "100%", bgcolor: "#000", color: "#fff" }}>
         {timeList?.map((timeData) => (
