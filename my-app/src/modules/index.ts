@@ -12,3 +12,7 @@ export type TTimeList = {
   city: string;
   time: string;
 };
+export interface ITimzeZone{
+  label:string,
+  value:string
+}

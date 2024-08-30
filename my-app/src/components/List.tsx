@@ -1,84 +1,90 @@
 import * as React from "react";
+import { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
 import { getCurrentTime, timeZones } from "../constants";
 import { TTimeList } from "../modules";
-import { useEffect } from "react";
 import DefaultClock from "./DefaultClock";
+import TimeDrawer from "./TimeDrawer";
 
 export default function TimeList() {
   const [timeList, setTimeList] = React.useState<TTimeList[]>([]);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const updateTimeList = () => {
     setTimeList((prevList) =>
-      prevList.map((item: any) => ({
+      prevList.map((item) => ({
         ...item,
-        time: getCurrentTime(item.value),
+        time: getCurrentTime(item.city),
       }))
     );
   };
 
-  const handleTimeZoneChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedTimeZone = event?.target.value;
-    console.log("selectedTimeZone", selectedTimeZone);
-    const currentTime = getCurrentTime(selectedTimeZone);
+  const handleTimeZoneClick = (timeZone: string, cityName: string) => {
+    const currentTime = getCurrentTime(timeZone);
 
     setTimeList((prevList) => [
       ...prevList,
       {
-        city: event.target.options[event.target.selectedIndex].text,
-        value: selectedTimeZone,
+        city: cityName,
         time: currentTime,
       },
     ]);
+    setDrawerOpen(false);
   };
 
-  useEffect(() => {
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
+
+  React.useEffect(() => {
     const intervalId = setInterval(updateTimeList, 1000);
     return () => clearInterval(intervalId);
   }, []);
-  console.log("29timeList", timeList);
+
   return (
     <>
-      <select onChange={handleTimeZoneChange}>
-        {timeZones?.map((timeZone) => {
-          return <option key={timeZone?.city}>{timeZone?.value}</option>;
-        })}
-      </select>
+      <Button variant="contained" onClick={toggleDrawer(true)}>
+        Zaman Dilimi Seç
+      </Button>
+    <TimeDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} handleTimeZoneClick={handleTimeZoneClick} />
       <DefaultClock />
-      {timeList?.map((timeData) => {
-        return (
-          <List sx={{ width: "100%", bgcolor: "#000", color: "#fff" }}>
-            <ListItem alignItems="flex-start" sx={{ paddingY: 2 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Box>
-                  <Typography
-                    sx={{ fontWeight: "bold", fontSize: 18, color: "#FF9500" }}
-                  >
-                    {timeData?.city}
-                  </Typography>
-                </Box>
-                <Box sx={{ textAlign: "right" }}>
-                  <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                    {timeData?.time}
-                  </Typography>
-                </Box>
+      <List sx={{ width: "100%", bgcolor: "#000", color: "#fff" }}>
+        {timeList?.map((timeData) => (
+          <ListItem
+            alignItems="flex-start"
+            key={timeData.city}
+            sx={{ paddingY: 2 }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Box>
+                <Typography
+                  sx={{ fontWeight: "bold", fontSize: 18, color: "#FF9500" }}
+                >
+                  {timeData?.city}
+                </Typography>
               </Box>
-            </ListItem>
-          </List>
-        );
-      })}
+              <Box sx={{ textAlign: "right" }}>
+                <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                  {timeData?.time}
+                </Typography>
+              </Box>
+            </Box>
+            <Divider />
+          </ListItem>
+        ))}
+      </List>
     </>
   );
 }
