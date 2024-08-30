@@ -1,12 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import {
-  BsFillPlayFill,
-  BsFillPauseFill,
-  BsFillStopFill,
-} from "react-icons/bs";
 import { Button } from "@mui/material";
 
 const Chronometer = () => {
