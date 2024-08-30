@@ -55,7 +55,7 @@ const AlarmTest = () => {
 
   return (
     <div>
-      <h1>{timer}</h1>
+      <h1 style={{color:"white"}}>{timer}</h1>
       <select onChange={handleChangeLangOption} value={option}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>

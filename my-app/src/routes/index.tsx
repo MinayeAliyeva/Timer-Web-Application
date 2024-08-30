@@ -9,7 +9,7 @@ import AlarmTest from "../test/alarm";
 
 export const routes: MyRouterObject[] = [
   {
-    path: "",
+    path: "/",
     element: <MainLayout />,
     children: [
       {
