@@ -1,6 +1,6 @@
 import { Box, Drawer, List, ListItem, Typography } from "@mui/material";
 import React from "react";
-import { timeZones } from "../constants";
+import { timeZones } from "./constants";
 
 const TimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => {
   return (

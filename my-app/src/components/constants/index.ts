@@ -1,4 +1,4 @@
-import { IOptions, ITimzeZone } from "./../modules/index";
+import { IOptions, ITimzeZone } from "../../modules/index";
 export const timeZones: ITimzeZone[] = [
   { label: "Abu Dhabi", value: "Asia/Dubai" },
   { label: "Amsterdam", value: "Europe/Amsterdam" },

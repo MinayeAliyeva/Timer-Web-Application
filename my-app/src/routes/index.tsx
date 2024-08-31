@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
-import MainLayout from "../layout/MainLayout";
+import MainLayout from "../shared/layout/MainLayout";
 import AlarmClock from "../pages/AlarmClock";
-import Chronometer from "../pages/Chronometer";
+import Chronometer from "../pages/chronometer";
 import Counter from "../pages/Counter";
 import TimeZones from "../pages/TimeZones";
 import { MyRouterObject } from "../modules";
