@@ -16,3 +16,8 @@ export interface ITimzeZone{
   label:string,
   value:string
 }
+export interface ITimeHistory {
+  hr:number,
+  min:number,
+  sec:number
+}
