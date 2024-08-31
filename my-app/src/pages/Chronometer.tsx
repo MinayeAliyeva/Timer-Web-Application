@@ -50,6 +50,7 @@ const Chronometer = () => {
   const resetTimer = useCallback(() => {
     setRunning(false);
     setTime({ hr: 0, min: 0, sec: 0 });
+    setTimeHistory([]);
   }, []);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
@@ -143,7 +144,8 @@ const Chronometer = () => {
                 Tur {time.step}
               </Typography>
               <Typography sx={{ fontSize: "18px" }}>
-                {formatTime(time.hr)}:{formatTime(time.min)}:{formatTime(time.sec)}
+                {formatTime(time.hr)}:{formatTime(time.min)}:
+                {formatTime(time.sec)}
               </Typography>
             </ListItem>
             {index < timeHistory.length - 1 && (
