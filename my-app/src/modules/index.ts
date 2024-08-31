@@ -20,4 +20,5 @@ export interface ITimeHistory {
   hr:number,
   min:number,
   sec:number
+  step?:number 
 }
