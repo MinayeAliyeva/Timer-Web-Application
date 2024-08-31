@@ -2,8 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { ITimeHistory } from "../modules";
 import { List, ListItem, Divider } from "@mui/material";
+
+interface ITimeHistory {
+  hr: number;
+  min: number;
+  sec: number;
+  step?: number; // Optional step property
+}
 
 const Chronometer = () => {
   const [time, setTime] = useState<ITimeHistory>({ hr: 0, min: 0, sec: 0 });
@@ -29,8 +35,10 @@ const Chronometer = () => {
           return { hr, min, sec };
         });
       }, 1000);
-    } else if (intervalId) {
-      clearInterval(intervalId);
+    } else {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
     }
 
     return () => {
@@ -40,22 +48,24 @@ const Chronometer = () => {
     };
   }, [running]);
 
-  const startTimer = useCallback(() => {
-    setRunning(!running);
+  const handleStartStop = useCallback(() => {
     if (running) {
+      setRunning(false);
       setStep((step) => step + 1);
       setTimeHistory((prevHistory) => [
         ...prevHistory,
         { ...time, step: step },
       ]);
     } else {
+      setRunning(true);
     }
-  }, [running, time, setTimeHistory, step]);
+  }, [running, setTimeHistory, time, step]);
 
   const resetTimer = useCallback(() => {
     setRunning(false);
     setTime({ hr: 0, min: 0, sec: 0 });
     setTimeHistory([]);
+    setStep(1);
   }, []);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
@@ -89,29 +99,45 @@ const Chronometer = () => {
         >
           {formatTime(time.hr)}:{formatTime(time.min)}:{formatTime(time.sec)}
         </Typography>
-        <Box
-          sx={{ display: "flex", justifyContent: "space-around", gap: "10px" }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", gap: "20px" }}>
           <Button
             sx={{
               borderRadius: "50%",
-              width: "100px",
-              height: "100px",
-              margin: "0 10px",
-              backgroundColor: "#4CAF50",
+              width: "80px",
+              height: "80px",
+              backgroundColor: running ? "#FF3B30" : "#4CD964",
+              color: "#fff",
+              fontSize: "18px",
+              fontWeight: "bold",
+              boxShadow: running
+                ? "0px 4px 6px rgba(255, 59, 48, 0.5)"
+                : "0px 4px 6px rgba(76, 217, 100, 0.5)",
+              "&:hover": {
+                backgroundColor: running ? "#FF3B30" : "#4CD964",
+                boxShadow: running
+                  ? "0px 6px 8px rgba(255, 59, 48, 0.7)"
+                  : "0px 6px 8px rgba(76, 217, 100, 0.7)",
+              },
             }}
             variant="contained"
-            onClick={startTimer}
+            onClick={handleStartStop}
           >
             {running ? "Pause" : "Start"}
           </Button>
           <Button
             sx={{
               borderRadius: "50%",
-              width: "100px",
-              height: "100px",
-              margin: "0 10px",
-              backgroundColor: "#FFC107",
+              width: "80px",
+              height: "80px",
+              backgroundColor: "#FFCC00",
+              color: "#fff",
+              fontSize: "18px",
+              fontWeight: "bold",
+              boxShadow: "0px 4px 6px rgba(255, 204, 0, 0.5)",
+              "&:hover": {
+                backgroundColor: "#FFCC00",
+                boxShadow: "0px 6px 8px rgba(255, 204, 0, 0.7)",
+              },
             }}
             variant="contained"
             onClick={resetTimer}
@@ -130,10 +156,11 @@ const Chronometer = () => {
                 justifyContent: "space-between",
                 padding: "10px 20px",
                 color: "#fff",
+                borderBottom: "1px solid #333",
               }}
             >
               <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
-                Tur {time.step}
+                Lap {time.step}
               </Typography>
               <Typography sx={{ fontSize: "18px" }}>
                 {formatTime(time.hr)}:{formatTime(time.min)}:
@@ -141,7 +168,7 @@ const Chronometer = () => {
               </Typography>
             </ListItem>
             {index < timeHistory.length - 1 && (
-              <Divider sx={{ backgroundColor: "#555" }} />
+              <Divider sx={{ backgroundColor: "#333" }} />
             )}
           </React.Fragment>
         ))}
