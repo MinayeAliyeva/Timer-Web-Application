@@ -40,12 +40,17 @@ const Chronometer = () => {
     };
   }, [running]);
 
-  const startTimer = useCallback(() => setRunning(true), []);
-  const stopTimer = useCallback(() => {
-    setRunning(false);
-    setStep((step) => step + 1);
-    setTimeHistory((prevHistory) => [...prevHistory, { ...time, step: step }]);
-  }, [setTimeHistory, setRunning, time, step]);
+  const startTimer = useCallback(() => {
+    setRunning(!running);
+    if (running) {
+      setStep((step) => step + 1);
+      setTimeHistory((prevHistory) => [
+        ...prevHistory,
+        { ...time, step: step },
+      ]);
+    } else {
+    }
+  }, [running, time, setTimeHistory, step]);
 
   const resetTimer = useCallback(() => {
     setRunning(false);
@@ -98,20 +103,7 @@ const Chronometer = () => {
             variant="contained"
             onClick={startTimer}
           >
-            Başla
-          </Button>
-          <Button
-            sx={{
-              borderRadius: "50%",
-              width: "100px",
-              height: "100px",
-              margin: "0 10px",
-              backgroundColor: "#F44336",
-            }}
-            variant="contained"
-            onClick={stopTimer}
-          >
-            Durdur
+            {running ? "Pause" : "Start"}
           </Button>
           <Button
             sx={{
@@ -124,7 +116,7 @@ const Chronometer = () => {
             variant="contained"
             onClick={resetTimer}
           >
-            Sıfırla
+            Reset
           </Button>
         </Box>
       </Box>
