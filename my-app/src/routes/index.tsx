@@ -1,21 +1,21 @@
 import { useRoutes } from "react-router-dom";
 import MainLayout from "../shared/layout/MainLayout";
-import AlarmClock from "../pages/AlarmClock";
+import AlarmClock from "../pages/alarm";
 import Chronometer from "../pages/chronometer";
-import Counter from "../pages/Counter";
-import TimeZones from "../pages/TimeZones";
+import Counter from "../pages/counter";
+import TimeZones from "../pages/timezone";
 import { MyRouterObject } from "../modules";
-
 
 export const routes: MyRouterObject[] = [
   {
     path: "/",
     element: <MainLayout />,
+
     children: [
       {
         index: true,
         element: <TimeZones />,
-        path:"/timezone"
+        path: "/timezone",
       },
       {
         path: "/alarm",
@@ -28,7 +28,7 @@ export const routes: MyRouterObject[] = [
       {
         path: "/counter",
         element: <Counter />,
-      }
+      },
     ],
   },
 ];

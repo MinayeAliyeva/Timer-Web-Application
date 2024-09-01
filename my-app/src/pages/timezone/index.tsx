@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import TimeList from "../components/List";
+import TimeList from "./TimeList";
 
 const TimeZones = () => {
   return (
