@@ -17,7 +17,7 @@ export const timeHistorySlice = createSlice({
       state: ITimeHistoryState,
       action: PayloadAction<any>
     ) => {
-      state.timeHistory = [...state.timeHistory, action?.payload];
+      state.timeHistory = [...state.timeHistory, {...action?.payload}];
       console.log("timeHistory", state?.timeHistory);
     },
     resetTimeHistory: (state: ITimeHistoryState) => {

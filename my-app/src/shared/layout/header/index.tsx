@@ -1,8 +1,5 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { HiPlus } from "react-icons/hi";
 
 export default function Header() {
   return (
@@ -33,9 +30,7 @@ export default function Header() {
       >
         Saatler
       </Typography>
-      <IconButton>
-        <HiPlus style={{ color: "#FF9500", fontSize: "30px" }} />
-      </IconButton>
+   
     </Box>
   );
 }
