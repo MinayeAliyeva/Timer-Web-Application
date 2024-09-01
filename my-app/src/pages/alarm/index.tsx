@@ -2,14 +2,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import { MdBed } from "react-icons/md";
+import SwitchButton from "../../shared/components/XSwitch";
+import PlusIcon from "../../shared/icons/PlusIcon";
+import { useState } from "react";
+import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
 const AlarmClock = () => {
-  const alarms = [
-    { time: "07:00", label: "Uyanma", active: true },
-    { time: "08:30", label: "İş", active: false },
-    { time: "14:00", label: "Öğle Yemeği", active: true },
-    { time: "18:00", label: "Spor", active: false },
-  ];
-
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const alarms = [{ time: "07:00", label: "Uyanma", active: true }];
+  const openDrawer = () => {
+    setDrawerVisible(!drawerVisible);
+  };
   return (
     <Box
       sx={{
@@ -22,10 +24,21 @@ const AlarmClock = () => {
       <Typography variant="h5" sx={{ fontWeight: "bold", color: "#FF9500" }}>
         Alarmlar
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        {" "}
-        <MdBed style={{ fontWeight: "bold",fontSize:"25px" }} /> |{" "}
-        <Typography style={{ fontWeight: "bold",fontSize:"25px" }}>Uyku Zamani</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box>
+          <MdBed style={{ fontWeight: "bold", fontSize: "25px" }} /> |{" "}
+          <Typography style={{ fontWeight: "bold", fontSize: "25px" }}>
+            Uyku Zamani
+          </Typography>
+        </Box>
+        <PlusIcon onClick={openDrawer} />
+        <AnchorTemporaryDrawer visible={drawerVisible} />
       </Box>
       {alarms.map((alarm, index) => (
         <Box
@@ -49,7 +62,7 @@ const AlarmClock = () => {
               {alarm.label}
             </Typography>
           </Box>
-          <Switch
+          {/* <Switch
             checked={alarm.active}
             sx={{
               "& .MuiSwitch-switchBase.Mui-checked": {
@@ -59,7 +72,8 @@ const AlarmClock = () => {
                 backgroundColor: "#FF9500",
               },
             }}
-          />
+          /> */}
+          <SwitchButton />
         </Box>
       ))}
     </Box>

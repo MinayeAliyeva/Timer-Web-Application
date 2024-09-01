@@ -1,4 +1,7 @@
-.App{
-    background-color: black;
-    height: 100vh;
+.App {
+  background-color: black;
+  height: 100vh;
+}
+.css-dl7nww-MuiPaper-root-MuiDrawer-paper {
+  height: 80vh !important;
 }
