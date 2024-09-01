@@ -4,16 +4,17 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { getCurrentTime } from "./constants";
-import { TTimeList } from "../modules";
-import DefaultClock from "./DefaultClock";
-import TimeDrawer from "./TimeDrawer";
+import { TTimeList } from "../../modules";
+
 import {
   SwipeableList,
   SwipeableListItem,
   SwipeAction,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
+import { getCurrentTime } from "../../shared/components/constants";
+import TimeDrawer from "../../shared/components/TimeDrawer";
+import DefaultClock from "../../shared/components/DefaultClock";
 
 export default function TimeList() {
   const [timeList, setTimeList] = React.useState<TTimeList[]>([]);
