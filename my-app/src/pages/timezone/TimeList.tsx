@@ -16,7 +16,7 @@ import TimeDrawer from "../../shared/components/TimeDrawer";
 import { useDispatch } from "react-redux";
 import { setCity } from "../../store/features/timezoneSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { getCitiesSelector, RootState } from "../../store";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Loading from "../../shared/components/Loading";
 
@@ -27,7 +27,7 @@ export default function TimeList() {
 
   const dispatch = useDispatch();
   const timeZones: string[] = useSelector<RootState>(
-    (state) => state.timezones.cities
+    getCitiesSelector
   ) as string[];
   console.log("cities", timeZones);
 

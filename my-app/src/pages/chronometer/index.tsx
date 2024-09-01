@@ -4,14 +4,18 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { List } from "@mui/material";
 import HistoryList from "./HistoryList";
-import { ITimeHistory, TypeTime } from "./modules";
+
+import { useDispatch } from "react-redux";
+import { resetTimeHistory, setTimeHistoryAction } from "../../store/features/clonometerSlice";
+import { useSelector } from "react-redux";
+import { getTimeHistorySelector } from "../../store";
+import { TypeTime } from "./modules";
 
 const Chronometer = () => {
   const [time, setTime] = useState<TypeTime>({ hr: 0, min: 0, sec: 0 });
-  const [timeHistory, setTimeHistory] = useState<ITimeHistory[]>([]);
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
     if (running) {
@@ -39,7 +43,7 @@ const Chronometer = () => {
       }
     };
   }, [running]);
-
+  const timeHistory = useSelector(getTimeHistorySelector);
   const startTimer = useCallback(() => {
     setRunning((prevRunning) => !prevRunning);
   }, []);
@@ -47,16 +51,19 @@ const Chronometer = () => {
   const resetTimer = useCallback(() => {
     setRunning(false);
     setTime({ hr: 0, min: 0, sec: 0 });
-    setTimeHistory([]);
+    // setTimeHistory([]);
+    dispatch(resetTimeHistory())
     setStep(1);
-  }, []);
+  }, [dispatch]);
 
   const addStep = useCallback(() => {
     const createdDate = new Date().toLocaleTimeString();
-    setTimeHistory((prevHistory) => [
-      ...prevHistory,
-      { ...time, step, createdDate },
-    ]);
+
+    // setTimeHistory((prevHistory) => [
+    //   ...prevHistory,
+    //   { ...time, step, createdDate },
+    // ]);
+    dispatch(setTimeHistoryAction({ ...time, step, createdDate }));
     setStep((prevStep) => prevStep + 1);
   }, [time, step]);
   console.log("HISTORY", timeHistory);
