@@ -7,6 +7,7 @@ interface IHistoryListProps {
   time: ITimeHistory;
   index: number;
   formatTime: (num: number) => string | number;
+  round: number;
 }
 
 const HistoryList: FC<IHistoryListProps> = ({
@@ -14,6 +15,7 @@ const HistoryList: FC<IHistoryListProps> = ({
   time,
   formatTime,
   index,
+  round,
 }) => {
   return (
     <>
@@ -25,6 +27,7 @@ const HistoryList: FC<IHistoryListProps> = ({
           color: "#fff",
         }}
       >
+        Round: {round}
         <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
           Tur {time.step} yarandi
           {

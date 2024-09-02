@@ -6,10 +6,7 @@ import { List } from "@mui/material";
 import HistoryList from "./HistoryList";
 
 import { useDispatch } from "react-redux";
-import {
-  resetTimeHistory,
-  setTimeHistoryAction,
-} from "../../store/features/clonometerSlice";
+import { setTimeHistoryAction } from "../../store/features/clonometerSlice";
 import { useSelector } from "react-redux";
 import { getTimeHistorySelector } from "../../store";
 import { TypeTime } from "./modules";
@@ -18,6 +15,8 @@ const Chronometer = () => {
   const [time, setTime] = useState<TypeTime>({ hr: 0, min: 0, sec: 0 });
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
+  const [round, setRound] = useState(1);
+
   const dispatch = useDispatch();
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
@@ -46,7 +45,9 @@ const Chronometer = () => {
       }
     };
   }, [running]);
+
   const timeHistory = useSelector(getTimeHistorySelector);
+  
   const startTimer = useCallback(() => {
     setRunning((prevRunning) => !prevRunning);
   }, []);
@@ -54,21 +55,15 @@ const Chronometer = () => {
   const resetTimer = useCallback(() => {
     setRunning(false);
     setTime({ hr: 0, min: 0, sec: 0 });
-    // setTimeHistory([]);
-    dispatch(resetTimeHistory());
     setStep(1);
-  }, [dispatch]);
+    setRound((prevRound) => prevRound + 1);
+  }, []);
 
   const addStep = useCallback(() => {
     const createdDate = new Date().toLocaleTimeString();
-    // setTimeHistory((prevHistory) => [
-    //   ...prevHistory,
-    //   { ...time, step, createdDate },
-    // ]);
     setStep((prevStep) => prevStep + 1);
-    dispatch(setTimeHistoryAction({ ...time, step, createdDate }));
-  }, [time, step]);
-  console.log("HISTORY", timeHistory);
+    dispatch(setTimeHistoryAction({ ...time, step, round, createdDate }));
+  }, [time, step, round]);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
@@ -136,13 +131,13 @@ const Chronometer = () => {
 
       <List sx={{ width: "100%", bgcolor: "#000", padding: "0" }}>
         {timeHistory.map((time, index) => (
-          
           <HistoryList
             key={index}
             timeHistory={timeHistory}
             time={time}
             formatTime={formatTime}
             index={index}
+            round={time.round}
           />
         ))}
       </List>
