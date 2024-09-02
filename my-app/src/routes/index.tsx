@@ -10,7 +10,6 @@ export const routes: MyRouterObject[] = [
   {
     path: "/",
     element: <MainLayout />,
-
     children: [
       {
         index: true,
