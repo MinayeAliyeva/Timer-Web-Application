@@ -1,5 +1,5 @@
 export interface ITimeHistory {
-  hr: number;
+  ms: number;
   min: number;
   sec: number;
   step: number;
@@ -7,7 +7,7 @@ export interface ITimeHistory {
   round:number
 }
 //state props types =ITimeHistoryState IProps
-export type  TypeTime =  Pick<ITimeHistory, "hr" | "min" | "sec">
+export type  TypeTime =  Pick<ITimeHistory, "ms" | "min" | "sec">
 export type TypeTimeHistory= Partial<ITimeHistory>;
 
 
