@@ -5,6 +5,7 @@ import Chronometer from "../pages/chronometer";
 import Counter from "../pages/counter";
 import TimeZones from "../pages/timezone";
 import { MyRouterObject } from "../modules";
+import Test from "../test/Test";
 
 export const routes: MyRouterObject[] = [
   {
@@ -28,6 +29,10 @@ export const routes: MyRouterObject[] = [
         path: "/counter",
         element: <Counter />,
       },
+      // {
+      //   path: "/test",
+      //   element: <Test />,
+      // },
     ],
   },
 ];
