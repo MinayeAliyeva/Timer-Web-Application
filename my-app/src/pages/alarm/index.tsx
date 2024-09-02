@@ -7,84 +7,201 @@ import { useEffect, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
 import { useSelector } from "react-redux";
 import { getAlarmHistory } from "../../store";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { MdDelete } from "react-icons/md";
+import { BiSort } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { deleteAlarm } from "../../store/features/alarmSlice";
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const alarms = useSelector(getAlarmHistory);
-  console.log("SLice Alarm", alarms);
-
+  const dispatch = useDispatch();
   const openDrawer = () => {
-    setDrawerVisible(!drawerVisible);
+    setDrawerVisible((prev) => !prev);
   };
-  useEffect(() => {
-  alarms?.forEach(()=>{
-    
-  })
-  }, [alarms]);
 
+  const playSound = () => {
+    if (!audio) {
+      const sound = new Audio("/sounds/alarm.mp3");
+      sound.loop = true;
+      sound.play();
+      setAudio(sound);
+    }
+  };
+
+  const handleAlertClose = () => {
+    setOpenSnackbar(false);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      setAudio(null);
+    }
+  };
+
+  const updatePastAlarms = (alarms: any[]) => {
+    return alarms.map((alarm: any) => {
+      console.log("updatePastAlarms alarm", alarm);
+
+      const now = new Date();
+      console.log("now", now);
+
+      const [hours, minutes] = alarm.time.split(":").map(Number);
+      const alarmTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        hours,
+        minutes
+      );
+
+      if (alarmTime < now) {
+        alarmTime.setDate(alarmTime.getDate() + 1);
+      }
+
+      const time = alarmTime.toTimeString().slice(0, 5); //time formater
+      return { ...alarm, time };
+    });
+  };
+
+  useEffect(() => {
+    const updatedAlarms = updatePastAlarms(alarms);
+
+    updatedAlarms.forEach((alarm: any) => {
+      if (alarm.isActive) {
+        const now = new Date();
+        const [hours, minutes] = alarm.time.split(":").map(Number);
+        const alarmTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes
+        );
+
+        const timeDiff = alarmTime.getTime() - now.getTime();
+        if (timeDiff > 0) {
+          setTimeout(() => {
+            setAlertMessage(`Alarm: ${alarm.time}`);
+            setOpenSnackbar(true);
+            playSound();
+          }, timeDiff);
+        }
+      }
+    });
+  }, [alarms]);
+  const deleteTime = (alarmId: string) => {
+    dispatch(deleteAlarm(alarmId))
+  };
   return (
     <Box
       sx={{
         padding: "50px 100px",
         backgroundColor: "#000",
         color: "#fff",
+        display: "flex",
+        flexDirection: "column",
         minHeight: "100vh",
       }}
     >
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: "#FF9500" }}>
-        Alarmlar
-      </Typography>
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
         }}
       >
-        <Box>
-          <MdBed style={{ fontWeight: "bold", fontSize: "25px" }} /> |{" "}
-          <Typography style={{ fontWeight: "bold", fontSize: "25px" }}>
-            Uyku Zamani
+        <Box sx={{ textAlign: "center" }}>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", color: "#FF9500" }}
+          >
+            Alarmlar
           </Typography>
-        </Box>
-        <PlusIcon onClick={openDrawer} />
-        <AnchorTemporaryDrawer visible={drawerVisible} />
-      </Box>
-      {alarms.map((alarm: any, index: any) => (
-        <Box
-          key={index}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px 0",
-            borderBottom: "1px solid #333",
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: "bold", fontSize: "30px" }}
-            >
-              {alarm.time}
-            </Typography>
-            <Typography variant="subtitle1" sx={{ color: "#8E8E93" }}>
-              {alarm.label}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <MdBed
+              style={{
+                fontWeight: "bold",
+                fontSize: "25px",
+                marginRight: "5px",
+              }}
+            />
+            <Typography style={{ fontWeight: "bold", fontSize: "25px" }}>
+              Uyku Zamani
             </Typography>
           </Box>
-          {/* <Switch
-            checked={alarm.active}
-            sx={{
-              "& .MuiSwitch-switchBase.Mui-checked": {
-                color: "#FF9500",
-              },
-              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                backgroundColor: "#FF9500",
-              },
-            }}
-          /> */}
-          <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
+          <MdDelete style={{ fontSize: "25px" }} />
+          <input type="text" />
+          <BiSort />
         </Box>
-      ))}
+        <PlusIcon onClick={openDrawer} />
+      </Box>
+      <Box
+        sx={{
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 150px)",
+          width: "100%",
+        }}
+      >
+        {alarms.map((alarm: any, index: any) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "10px 0",
+              borderBottom: "1px solid #333",
+            }}
+          >
+            <Box>
+              <Typography
+                variant="h4"
+                sx={{ fontWeight: "bold", fontSize: "30px" }}
+              >
+                {alarm.time}
+              </Typography>
+              <Typography variant="subtitle1" sx={{ color: "#8E8E93" }}>
+                {alarm.note}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
+              <MdDelete
+                onClick={() => deleteTime(alarm.id)}
+                style={{ fontSize: "25px" }}
+              />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+
+      <AnchorTemporaryDrawer visible={drawerVisible} />
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={null}
+        onClose={handleAlertClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

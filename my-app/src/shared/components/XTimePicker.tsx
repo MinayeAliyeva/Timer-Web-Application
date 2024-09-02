@@ -1,31 +1,64 @@
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAlarm } from "../../store/features/alarmSlice";
 import { uid } from "uid";
+import { TextField, Box, Button } from "@mui/material";
+
+//helpere cikara bilirmiyim?
+const formatTime = (date: Date) => {
+  //12:30
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
 
 const XTimePicker = () => {
   const dispatch = useDispatch();
-  const handleAccept = (newValue: any) => {
-    const formattedTime = newValue?.format("HH:mm");
+  const [time, setTime] = useState<Date>(new Date());
+  const [note, setNote] = useState<string>("");
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = e.target.value.split(":").map(Number);
+    const now = new Date();
+    now.setHours(hours);
+    now.setMinutes(minutes);
+    setTime(now);
+  };
+
+  const handleAccept = () => {
+    const formattedTime = formatTime(time);
     console.log("Seçilen Zaman:", formattedTime);
-    dispatch(setAlarm({ time: formattedTime, isActive: true, id: uid() }));
+    dispatch(
+      setAlarm({
+        time: formattedTime,
+        note: note, // Notu ekle
+        isActive: true,
+        id: uid(),
+      })
+    );
+    setNote("");
+    setTime(new Date());
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["TimePicker", "TimePicker", "TimePicker"]}>
-        <DemoItem label={'"hours", "minutes" ve "seconds"'}>
-          <TimePicker
-            onAccept={handleAccept} // OK butonuna tıklandığında çalışır
-            views={["hours", "minutes"]}
-            ampm={false}
-          />
-        </DemoItem>
-      </DemoContainer>
-    </LocalizationProvider>
+    <Box display="flex" flexDirection="column" gap={2}>
+      <TextField
+        label="Saat"
+        variant="outlined"
+        type="time"
+        value={formatTime(time)}
+        onChange={handleTimeChange}
+      />
+      <TextField
+        label="Not"
+        variant="outlined"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+      />
+      <Button variant="contained" color="primary" onClick={handleAccept}>
+        Alarmı Ayarla
+      </Button>
+    </Box>
   );
 };
 
