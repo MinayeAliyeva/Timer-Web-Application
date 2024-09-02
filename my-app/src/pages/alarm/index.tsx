@@ -12,7 +12,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { MdDelete } from "react-icons/md";
 import { BiSort } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { deleteAlarm } from "../../store/features/alarmSlice";
+import { clearAllAlarmHistory, deleteAlarm } from "../../store/features/alarmSlice";
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -62,14 +62,13 @@ const AlarmClock = () => {
         alarmTime.setDate(alarmTime.getDate() + 1);
       }
 
-      const time = alarmTime.toTimeString().slice(0, 5); //time formater
+      const time = alarmTime.toTimeString().slice(0, 5);
       return { ...alarm, time };
     });
   };
 
   useEffect(() => {
     const updatedAlarms = updatePastAlarms(alarms);
-
     updatedAlarms.forEach((alarm: any) => {
       if (alarm.isActive) {
         const now = new Date();
@@ -93,9 +92,15 @@ const AlarmClock = () => {
       }
     });
   }, [alarms]);
+  //deleteTime
   const deleteTime = (alarmId: string) => {
-    dispatch(deleteAlarm(alarmId))
+    dispatch(deleteAlarm(alarmId));
   };
+  const clearAllAlarms=()=>{
+    console.log("clear");
+    
+    dispatch(clearAllAlarmHistory())
+  }
   return (
     <Box
       sx={{
@@ -141,11 +146,20 @@ const AlarmClock = () => {
               Uyku Zamani
             </Typography>
           </Box>
-          <MdDelete style={{ fontSize: "25px" }} />
-          <input type="text" />
-          <BiSort />
         </Box>
         <PlusIcon onClick={openDrawer} />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+          {" "}
+          CLEAR ALL ALARMS <MdDelete onClick={()=>clearAllAlarms()}  style={{ fontSize: "25px" }} />
+        </Box>
       </Box>
       <Box
         sx={{
