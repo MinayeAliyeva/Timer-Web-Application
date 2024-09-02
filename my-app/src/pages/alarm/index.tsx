@@ -9,14 +9,17 @@ import { useSelector } from "react-redux";
 import { getAlarmHistory } from "../../store";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-
+import { MdDelete } from "react-icons/md";
+import { BiSort } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { deleteAlarm } from "../../store/features/alarmSlice";
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const alarms = useSelector(getAlarmHistory);
-
+  const dispatch = useDispatch();
   const openDrawer = () => {
     setDrawerVisible((prev) => !prev);
   };
@@ -44,8 +47,8 @@ const AlarmClock = () => {
       console.log("updatePastAlarms alarm", alarm);
 
       const now = new Date();
-      console.log("now",now);
-      
+      console.log("now", now);
+
       const [hours, minutes] = alarm.time.split(":").map(Number);
       const alarmTime = new Date(
         now.getFullYear(),
@@ -90,7 +93,9 @@ const AlarmClock = () => {
       }
     });
   }, [alarms]);
-
+  const deleteTime = (alarmId: string) => {
+    dispatch(deleteAlarm(alarmId))
+  };
   return (
     <Box
       sx={{
@@ -136,6 +141,9 @@ const AlarmClock = () => {
               Uyku Zamani
             </Typography>
           </Box>
+          <MdDelete style={{ fontSize: "25px" }} />
+          <input type="text" />
+          <BiSort />
         </Box>
         <PlusIcon onClick={openDrawer} />
       </Box>
@@ -168,7 +176,13 @@ const AlarmClock = () => {
                 {alarm.note}
               </Typography>
             </Box>
-            <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
+              <MdDelete
+                onClick={() => deleteTime(alarm.id)}
+                style={{ fontSize: "25px" }}
+              />
+            </Box>
           </Box>
         ))}
       </Box>

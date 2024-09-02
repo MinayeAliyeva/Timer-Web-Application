@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IAlarmHistoryState {
-  alarmHistory: any;
+  alarmHistory: { id: string; time: string; note: string; isActive: boolean }[];
 }
 
 const initialState: IAlarmHistoryState = {
@@ -24,9 +24,16 @@ export const alarmSlice = createSlice({
           : alarm
       );
     },
+    deleteAlarm: (state, action: PayloadAction<string>) => {
+      const timeId = action.payload;
+      state.alarmHistory = state.alarmHistory.filter(
+        (time) => time.id !== timeId
+      );
+    },
   },
 });
 
-export const { setAlarm, startAlarm, toogleIsActive } = alarmSlice.actions;
+export const { setAlarm, startAlarm, toogleIsActive, deleteAlarm } =
+  alarmSlice.actions;
 
 export default alarmSlice.reducer;
