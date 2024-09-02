@@ -30,10 +30,18 @@ export const alarmSlice = createSlice({
         (time) => time.id !== timeId
       );
     },
+    clearAllAlarmHistory: (state) => {
+      state.alarmHistory = [...initialState.alarmHistory];
+    },
   },
 });
 
-export const { setAlarm, startAlarm, toogleIsActive, deleteAlarm } =
-  alarmSlice.actions;
+export const {
+  setAlarm,
+  startAlarm,
+  toogleIsActive,
+  deleteAlarm,
+  clearAllAlarmHistory,
+} = alarmSlice.actions;
 
 export default alarmSlice.reducer;
