@@ -19,7 +19,9 @@ export const alarmSlice = createSlice({
     toogleIsActive: (state, action) => {
       const alarmId = action.payload.alarmId;
       state.alarmHistory = state.alarmHistory.map((alarm: any) =>
-        alarm.id === alarmId ? { ...alarm, isActive: !alarm.isActive } : alarm
+        alarm.id === alarmId
+          ? { ...alarm, isActive: !alarm.isActive, alarm: alarm.note }
+          : alarm
       );
     },
   },
