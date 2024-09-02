@@ -31,7 +31,7 @@ export default function Footer() {
         label="Dünya saati"
         value="Dünya saati"
         icon={<TfiWorld />}
-        onClick={()=>navigate("/timezone")}
+        onClick={() => navigate("/timezone")}
         sx={{
           color: value === "Dünya saati" ? "#FF9500" : "#fff",
           fontSize: "250px",
@@ -43,7 +43,7 @@ export default function Footer() {
       <BottomNavigationAction
         label="Alarmlar"
         value="Alarmlar"
-        onClick={()=>navigate("/alarm")}
+        onClick={() => navigate("/alarm")}
         icon={<IoIosAlarm />}
         sx={{
           color: value === "Alarmlar" ? "#FF9500" : "#fff",
@@ -56,7 +56,7 @@ export default function Footer() {
       <BottomNavigationAction
         label="Kronometre"
         value="Kronometre"
-        onClick={()=>navigate("/chronometer")}
+        onClick={() => navigate("/chronometer")}
         icon={<RxLapTimer />}
         sx={{
           color: value === "Kronometre" ? "#FF9500" : "#fff",
@@ -69,7 +69,7 @@ export default function Footer() {
       <BottomNavigationAction
         label="Sayaçlar"
         value="Sayaçlar"
-        onClick={()=>navigate("/counter")}
+        onClick={() => navigate("/counter")}
         icon={<IoIosTimer />}
         sx={{
           color: value === "Sayaçlar" ? "#FF9500" : "#fff",
@@ -79,6 +79,19 @@ export default function Footer() {
           },
         }}
       />
+      {/* <BottomNavigationAction
+        label="Sayaçlar"
+        value="Sayaçlar"
+        onClick={()=>navigate("/test")}
+        icon={<IoIosTimer />}
+        sx={{
+          color: value === "Sayaçlar" ? "#FF9500" : "#fff",
+          fontSize: "250px",
+          "&.Mui-selected": {
+            color: "#FF9500",
+          },
+        }}
+      /> */}
     </BottomNavigation>
   );
 }

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import timeZoneSlice from "./features/timezoneSlice";
 import timeHistorySlice from "./features/clonometerSlice";
 import alarmSlice from "./features/alarmSlice";
+import testSlice from "./features/testSlice";
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     timezones: timeZoneSlice,
     clonometer: timeHistorySlice,
     alarm: alarmSlice,
+    test: testSlice,
   },
 });
 

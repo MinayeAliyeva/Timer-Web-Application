@@ -1,53 +1,61 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { List } from "@mui/material";
 import HistoryList from "./HistoryList";
 import { useDispatch } from "react-redux";
-import { setTimeHistoryAction } from "../../store/features/clonometerSlice";
+import {
+  setTimeHistoryAction,
+  startTime,
+} from "../../store/features/clonometerSlice";
 import { useSelector } from "react-redux";
-import { getTimeHistorySelector } from "../../store";
+import { getTimeHistorySelector, RootState } from "../../store";
 import { TypeTime } from "./modules";
-
+//rerender oxunur burdan
 const Chronometer = () => {
   // Milisaniye de eklenmiş durumda
-  const [time, setTime] = useState<TypeTime>({ min: 0, sec: 0, ms: 0 });
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
   const [round, setRound] = useState(1);
 
   const dispatch = useDispatch();
+  let time = useSelector<RootState>(
+    (state) => state.clonometer.timeList
+  ) as any;
+  let { min, sec, ms } = time ?? { min: 0, sec: 0, ms: 0 };
+
+  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined); //comp rerender oldugda current deyeri goturur
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
     if (running) {
-      intervalId = setInterval(() => {
-        setTime((prevTime) => {
-          let { min, sec, ms } = prevTime;
-          ms += 100; // milisaniyeyi 100 ms olarak artır
-          if (ms === 1000) {
-            // 1000 ms = 1 saniye
-            ms = 0;
-            sec += 1;
-          }
-          if (sec === 60) {
-            sec = 0;
-            min += 1;
-          }
-          if (min === 60) {
-            min = 0;
-          }
-          return { min, sec, ms };
+      // interval_id.current
+      interval_id.current = setInterval(() => {
+        ms++;
+        if (ms >= 100) {
+          sec++;
+          ms = 0;
+        }
+        if (sec >= 60) {
+          min++;
+          sec = 0;
+        }
+        console.log("{ min, sec, ms }", {
+          min,
+          sec,
+          ms,
         });
-      }, 100); // 100 ms aralıklarla güncellenir
-    } else if (intervalId) {
-      clearInterval(intervalId);
+        dispatch(
+          startTime({
+            min,
+            sec,
+            ms,
+          })
+        );
+      }, 1000);
+    } else {
+      console.log("pause case");
+      clearInterval(interval_id.current);
     }
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
   }, [running]);
 
   const timeHistory = useSelector(getTimeHistorySelector);
@@ -58,7 +66,7 @@ const Chronometer = () => {
 
   const resetTimer = useCallback(() => {
     setRunning(false);
-    setTime({ min: 0, sec: 0, ms: 0 });
+    // setTime({ min: 0, sec: 0, ms: 0 });
     setStep(1);
     setRound((prevRound) => prevRound + 1);
   }, []);
@@ -70,6 +78,8 @@ const Chronometer = () => {
   }, [time, step, round, dispatch]);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
+  const inputRef = useRef<any>("");
+  console.log("inputRef", inputRef);
 
   return (
     <>
@@ -98,7 +108,8 @@ const Chronometer = () => {
             color: "#fff",
           }}
         >
-          {formatTime(time.min)}:{formatTime(time.sec)}.{time.ms / 10}
+          {formatTime(time.min)}:{formatTime(time.sec)}.{formatTime(time.ms)}
+          {/* `{time.min}:{time.sec}.{time.ms}` */}
         </Typography>
         <Box
           sx={{ display: "flex", justifyContent: "space-around", gap: "10px" }}
@@ -145,6 +156,7 @@ const Chronometer = () => {
           />
         ))}
       </List>
+      <input type="text" ref={inputRef} />
     </>
   );
 };
