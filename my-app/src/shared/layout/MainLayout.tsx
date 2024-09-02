@@ -1,13 +1,14 @@
-import React from "react";
 import Header from "./header";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Footer from "./footer";
 
 const MainLayout = () => {
+  const location = useLocation();
+
   return (
     <>
       <Header />
-      <Outlet />
+      {location.pathname === "/" ? <Navigate to="/timezone" /> : <Outlet />}
       <Footer />
     </>
   );

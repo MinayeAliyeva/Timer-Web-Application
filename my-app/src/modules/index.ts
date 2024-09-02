@@ -17,7 +17,7 @@ export interface ITimzeZone{
   value:string
 }
 export interface ITimeHistory {
-  hr:number,
+  ms:number,
   min:number,
   sec:number
   step?:number 

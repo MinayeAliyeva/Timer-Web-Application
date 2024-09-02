@@ -36,7 +36,7 @@ const HistoryList: FC<IHistoryListProps> = ({
           }
         </Typography>
         <Typography sx={{ fontSize: "18px" }}>
-          {formatTime(time.hr)}:{formatTime(time.min)}:{formatTime(time.sec)}
+          {formatTime(time.min)}:{formatTime(time.sec)}:{formatTime(time.ms)}
         </Typography>
       </ListItem>
       {index < timeHistory.length - 1 && (

@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { List } from "@mui/material";
 import HistoryList from "./HistoryList";
-
 import { useDispatch } from "react-redux";
 import { setTimeHistoryAction } from "../../store/features/clonometerSlice";
 import { useSelector } from "react-redux";
@@ -12,7 +11,8 @@ import { getTimeHistorySelector } from "../../store";
 import { TypeTime } from "./modules";
 
 const Chronometer = () => {
-  const [time, setTime] = useState<TypeTime>({ hr: 0, min: 0, sec: 0 });
+  // Milisaniye de eklenmiş durumda
+  const [time, setTime] = useState<TypeTime>({ min: 0, sec: 0, ms: 0 });
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
   const [round, setRound] = useState(1);
@@ -23,19 +23,23 @@ const Chronometer = () => {
     if (running) {
       intervalId = setInterval(() => {
         setTime((prevTime) => {
-          let { hr, min, sec } = prevTime;
-          sec += 1;
+          let { min, sec, ms } = prevTime;
+          ms += 100; // milisaniyeyi 100 ms olarak artır
+          if (ms === 1000) {
+            // 1000 ms = 1 saniye
+            ms = 0;
+            sec += 1;
+          }
           if (sec === 60) {
             sec = 0;
             min += 1;
           }
           if (min === 60) {
             min = 0;
-            hr += 1;
           }
-          return { hr, min, sec };
+          return { min, sec, ms };
         });
-      }, 1000);
+      }, 100); // 100 ms aralıklarla güncellenir
     } else if (intervalId) {
       clearInterval(intervalId);
     }
@@ -47,14 +51,14 @@ const Chronometer = () => {
   }, [running]);
 
   const timeHistory = useSelector(getTimeHistorySelector);
-  
+
   const startTimer = useCallback(() => {
     setRunning((prevRunning) => !prevRunning);
   }, []);
 
   const resetTimer = useCallback(() => {
     setRunning(false);
-    setTime({ hr: 0, min: 0, sec: 0 });
+    setTime({ min: 0, sec: 0, ms: 0 });
     setStep(1);
     setRound((prevRound) => prevRound + 1);
   }, []);
@@ -63,7 +67,7 @@ const Chronometer = () => {
     const createdDate = new Date().toLocaleTimeString();
     setStep((prevStep) => prevStep + 1);
     dispatch(setTimeHistoryAction({ ...time, step, round, createdDate }));
-  }, [time, step, round]);
+  }, [time, step, round, dispatch]);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
@@ -94,7 +98,7 @@ const Chronometer = () => {
             color: "#fff",
           }}
         >
-          {formatTime(time.hr)}:{formatTime(time.min)}:{formatTime(time.sec)}
+          {formatTime(time.min)}:{formatTime(time.sec)}.{time.ms / 10}
         </Typography>
         <Box
           sx={{ display: "flex", justifyContent: "space-around", gap: "10px" }}
