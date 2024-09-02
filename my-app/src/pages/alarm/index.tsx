@@ -1,17 +1,26 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Switch from "@mui/material/Switch";
 import { MdBed } from "react-icons/md";
 import SwitchButton from "../../shared/components/XSwitch";
 import PlusIcon from "../../shared/icons/PlusIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
+import { useSelector } from "react-redux";
+import { getAlarmHistory } from "../../store";
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const alarms = [{ time: "07:00", label: "Uyanma", active: true }];
+  const alarms = useSelector(getAlarmHistory);
+  console.log("SLice Alarm", alarms);
+
   const openDrawer = () => {
     setDrawerVisible(!drawerVisible);
   };
+  useEffect(() => {
+  alarms?.forEach(()=>{
+    
+  })
+  }, [alarms]);
+
   return (
     <Box
       sx={{
@@ -40,7 +49,7 @@ const AlarmClock = () => {
         <PlusIcon onClick={openDrawer} />
         <AnchorTemporaryDrawer visible={drawerVisible} />
       </Box>
-      {alarms.map((alarm, index) => (
+      {alarms.map((alarm: any, index: any) => (
         <Box
           key={index}
           sx={{
@@ -73,7 +82,7 @@ const AlarmClock = () => {
               },
             }}
           /> */}
-          <SwitchButton />
+          <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
         </Box>
       ))}
     </Box>

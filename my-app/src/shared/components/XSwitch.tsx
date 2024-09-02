@@ -1,5 +1,8 @@
 import Switch from "@mui/material/Switch";
 import { FC } from "react";
+import { useDispatch } from "react-redux";
+import { toogleIsActive } from "../../store/features/alarmSlice";
+
 interface IPropsSwitch {
   defaultChecked?: boolean;
   label?: {
@@ -7,13 +10,23 @@ interface IPropsSwitch {
       "aria-label": string;
     };
   };
+  isActive: any;
+  alarmId: number;
 }
+
 const defaultLabel = { inputProps: { "aria-label": "Switch demo" } };
+
 const XSwitch: FC<IPropsSwitch> = ({
-  defaultChecked = false,
   label = defaultLabel,
+  isActive = false,
+  alarmId,
 }) => {
-  return <Switch {...label} defaultChecked />;
+  const dispatch = useDispatch();
+  const changeIsActive = () => {
+    dispatch(toogleIsActive({ isActive, alarmId }));
+  };
+
+  return <Switch {...label} checked={isActive} onChange={changeIsActive} />;
 };
 
 export default XSwitch;
