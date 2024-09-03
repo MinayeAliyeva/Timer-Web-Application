@@ -13,15 +13,19 @@ export const timeZoneSlice = createSlice({
   initialState,
   reducers: {
     setCity: (state: ITimeZone, action: PayloadAction<string>) => {
-      console.log("action", action.payload);
       const cityExists = state?.cities.find((city) => city === action?.payload);
       if (!cityExists) {
         state.cities = [...state.cities, action.payload];
       }
     },
+    deleteCity: (state, action) => {
+      console.log('ac',action.payload);
+      
+      state.cities = state.cities.filter((city) => city.split('/')[1] !== action.payload);
+    },
   },
 });
 
-export const { setCity } = timeZoneSlice.actions;
+export const { setCity, deleteCity } = timeZoneSlice.actions;
 
 export default timeZoneSlice.reducer;

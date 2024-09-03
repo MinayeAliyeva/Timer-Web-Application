@@ -11,15 +11,16 @@ export interface IOptions {
 export type TTimeList = {
   city: string;
   time: string;
+  id:number
 };
-export interface ITimzeZone{
-  label:string,
-  value:string
+export interface ITimzeZone {
+  label: string;
+  value: string;
+  id: number;
 }
 export interface ITimeHistory {
-  ms:number,
-  min:number,
-  sec:number
-  step?:number 
+  ms: number;
+  min: number;
+  sec: number;
+  step?: number;
 }
-
