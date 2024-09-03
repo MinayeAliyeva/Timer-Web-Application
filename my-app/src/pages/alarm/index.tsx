@@ -1,18 +1,21 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { MdBed } from "react-icons/md";
-import SwitchButton from "../../shared/components/XSwitch";
 import PlusIcon from "../../shared/icons/PlusIcon";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
 import { useSelector } from "react-redux";
 import { getAlarmHistory } from "../../store";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 import { MdDelete } from "react-icons/md";
-import { BiSort } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { clearAllAlarmHistory, deleteAlarm } from "../../store/features/alarmSlice";
+import {
+  clearAllAlarmHistory,
+  deleteAlarm,
+} from "../../store/features/alarmSlice";
+import AlarmSnackBar from "./AlarmSnackBar";
+import AlarmList from "./AlarmList";
+import { IAlarm } from "./modules";
+
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -42,13 +45,9 @@ const AlarmClock = () => {
     }
   };
 
-  const updatePastAlarms = (alarms: any[]) => {
-    return alarms.map((alarm: any) => {
-      console.log("updatePastAlarms alarm", alarm);
-
+  const updatePastAlarms = (alarms: IAlarm[]) => {
+    return alarms.map((alarm: IAlarm) => {
       const now = new Date();
-      console.log("now", now);
-
       const [hours, minutes] = alarm.time.split(":").map(Number);
       const alarmTime = new Date(
         now.getFullYear(),
@@ -61,7 +60,6 @@ const AlarmClock = () => {
       if (alarmTime < now) {
         alarmTime.setDate(alarmTime.getDate() + 1);
       }
-
       const time = alarmTime.toTimeString().slice(0, 5);
       return { ...alarm, time };
     });
@@ -69,7 +67,7 @@ const AlarmClock = () => {
 
   useEffect(() => {
     const updatedAlarms = updatePastAlarms(alarms);
-    updatedAlarms.forEach((alarm: any) => {
+    const timeouts = updatedAlarms.map((alarm: any) => {
       if (alarm.isActive) {
         const now = new Date();
         const [hours, minutes] = alarm.time.split(":").map(Number);
@@ -83,24 +81,33 @@ const AlarmClock = () => {
 
         const timeDiff = alarmTime.getTime() - now.getTime();
         if (timeDiff > 0) {
-          setTimeout(() => {
+          return setTimeout(() => {
             setAlertMessage(`Alarm: ${alarm.time}`);
             setOpenSnackbar(true);
             playSound();
           }, timeDiff);
         }
       }
+      return null;
     });
-  }, [alarms]);
-  //deleteTime
-  const deleteTime = (alarmId: string) => {
-    dispatch(deleteAlarm(alarmId));
+
+    return () => {
+      timeouts.forEach((timeoutId) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      });
+    };
+  }, [alarms, audio]);
+  const deleteTime = useCallback(
+    (alarmId: string) => {
+      dispatch(deleteAlarm(alarmId));
+    },
+    [dispatch]
+  );
+  const clearAllAlarms = () => {
+    dispatch(clearAllAlarmHistory());
   };
-  const clearAllAlarms=()=>{
-    console.log("clear");
-    
-    dispatch(clearAllAlarmHistory())
-  }
   return (
     <Box
       sx={{
@@ -158,7 +165,11 @@ const AlarmClock = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {" "}
-          CLEAR ALL ALARMS <MdDelete onClick={()=>clearAllAlarms()}  style={{ fontSize: "25px" }} />
+          CLEAR ALL ALARMS{" "}
+          <MdDelete
+            onClick={() => clearAllAlarms()}
+            style={{ fontSize: "25px" }}
+          />
         </Box>
       </Box>
       <Box
@@ -168,54 +179,17 @@ const AlarmClock = () => {
           width: "100%",
         }}
       >
-        {alarms.map((alarm: any, index: any) => (
-          <Box
-            key={index}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "10px 0",
-              borderBottom: "1px solid #333",
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h4"
-                sx={{ fontWeight: "bold", fontSize: "30px" }}
-              >
-                {alarm.time}
-              </Typography>
-              <Typography variant="subtitle1" sx={{ color: "#8E8E93" }}>
-                {alarm.note}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <SwitchButton isActive={alarm.isActive} alarmId={alarm.id} />
-              <MdDelete
-                onClick={() => deleteTime(alarm.id)}
-                style={{ fontSize: "25px" }}
-              />
-            </Box>
-          </Box>
+        {alarms.map((alarm, index) => (
+          <AlarmList deleteTime={deleteTime} alarm={alarm} index={index} />
         ))}
       </Box>
 
       <AnchorTemporaryDrawer visible={drawerVisible} />
-
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={null}
-        onClose={handleAlertClose}
-      >
-        <Alert
-          onClose={handleAlertClose}
-          severity="warning"
-          sx={{ width: "100%" }}
-        >
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      <AlarmSnackBar
+        handleAlertClose={handleAlertClose}
+        openSnackbar={openSnackbar}
+        alertMessage={alertMessage}
+      />
     </Box>
   );
 };

@@ -11,10 +11,7 @@ import {
 } from "../../store/features/clonometerSlice";
 import { useSelector } from "react-redux";
 import { getTimeHistorySelector, RootState } from "../../store";
-import { TypeTime } from "./modules";
-//rerender oxunur burdan
 const Chronometer = () => {
-  // Milisaniye de eklenmiş durumda
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
   const [round, setRound] = useState(1);
@@ -25,10 +22,9 @@ const Chronometer = () => {
   ) as any;
   let { min, sec, ms } = time ?? { min: 0, sec: 0, ms: 0 };
 
-  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined); //comp rerender oldugda current deyeri goturur
+  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined); 
   useEffect(() => {
     if (running) {
-      // interval_id.current
       interval_id.current = setInterval(() => {
         ms++;
         if (ms >= 100) {
@@ -66,7 +62,6 @@ const Chronometer = () => {
 
   const resetTimer = useCallback(() => {
     setRunning(false);
-    // setTime({ min: 0, sec: 0, ms: 0 });
     setStep(1);
     setRound((prevRound) => prevRound + 1);
   }, []);
@@ -109,7 +104,6 @@ const Chronometer = () => {
           }}
         >
           {formatTime(time.min)}:{formatTime(time.sec)}.{formatTime(time.ms)}
-          {/* `{time.min}:{time.sec}.{time.ms}` */}
         </Typography>
         <Box
           sx={{ display: "flex", justifyContent: "space-around", gap: "10px" }}

@@ -3,13 +3,12 @@ export interface ITimeHistory {
   min: number;
   sec: number;
   step: number;
-  createdDate: string ;
-  round:number
+  createdDate: string;
+  round: number;
 }
 //state props types =ITimeHistoryState IProps
-export type  TypeTime =  Pick<ITimeHistory, "ms" | "min" | "sec">
-export type TypeTimeHistory= Partial<ITimeHistory>;
-
+export type TypeTime = Pick<ITimeHistory, "ms" | "min" | "sec">;
+export type TypeTimeHistory = Partial<ITimeHistory>;
 
 
 // export interface IHistory {
@@ -30,6 +29,6 @@ export type TypeTimeHistory= Partial<ITimeHistory>;
 //   createdDate?: string | Date;
 //   }   */
 //   /*
-//   time :Omit<IHistory,"step"|"createDate"> //silir 
+//   time :Omit<IHistory,"step"|"createDate"> //silir
 //   */
 // }
