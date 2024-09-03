@@ -11,7 +11,7 @@ interface IPropsSwitch {
     };
   };
   isActive: any;
-  alarmId: number;
+  alarmId: string;
 }
 
 const defaultLabel = { inputProps: { "aria-label": "Switch demo" } };

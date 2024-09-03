@@ -4,9 +4,7 @@ import { setAlarm } from "../../store/features/alarmSlice";
 import { uid } from "uid";
 import { TextField, Box, Button } from "@mui/material";
 
-//helpere cikara bilirmiyim?
 const formatTime = (date: Date) => {
-  //12:30
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
@@ -27,11 +25,10 @@ const XTimePicker = () => {
 
   const handleAccept = () => {
     const formattedTime = formatTime(time);
-    console.log("Seçilen Zaman:", formattedTime);
     dispatch(
       setAlarm({
         time: formattedTime,
-        note: note, // Notu ekle
+        note: note, 
         isActive: true,
         id: uid(),
       })
