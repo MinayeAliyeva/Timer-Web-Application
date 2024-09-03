@@ -10,9 +10,11 @@ import { getAlarmHistory } from "../../store";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { MdDelete } from "react-icons/md";
-import { BiSort } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { clearAllAlarmHistory, deleteAlarm } from "../../store/features/alarmSlice";
+import {
+  clearAllAlarmHistory,
+  deleteAlarm,
+} from "../../store/features/alarmSlice";
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -44,11 +46,7 @@ const AlarmClock = () => {
 
   const updatePastAlarms = (alarms: any[]) => {
     return alarms.map((alarm: any) => {
-      console.log("updatePastAlarms alarm", alarm);
-
       const now = new Date();
-      console.log("now", now);
-
       const [hours, minutes] = alarm.time.split(":").map(Number);
       const alarmTime = new Date(
         now.getFullYear(),
@@ -61,7 +59,6 @@ const AlarmClock = () => {
       if (alarmTime < now) {
         alarmTime.setDate(alarmTime.getDate() + 1);
       }
-
       const time = alarmTime.toTimeString().slice(0, 5);
       return { ...alarm, time };
     });
@@ -69,7 +66,7 @@ const AlarmClock = () => {
 
   useEffect(() => {
     const updatedAlarms = updatePastAlarms(alarms);
-    updatedAlarms.forEach((alarm: any) => {
+    const timeouts = updatedAlarms.map((alarm: any) => {
       if (alarm.isActive) {
         const now = new Date();
         const [hours, minutes] = alarm.time.split(":").map(Number);
@@ -83,24 +80,32 @@ const AlarmClock = () => {
 
         const timeDiff = alarmTime.getTime() - now.getTime();
         if (timeDiff > 0) {
-          setTimeout(() => {
+          return setTimeout(() => {
             setAlertMessage(`Alarm: ${alarm.time}`);
             setOpenSnackbar(true);
             playSound();
           }, timeDiff);
         }
       }
+      return null;
     });
-  }, [alarms]);
-  //deleteTime
+
+    return () => {
+      timeouts.forEach((timeoutId) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      });
+    };
+  }, [alarms, audio]);
   const deleteTime = (alarmId: string) => {
     dispatch(deleteAlarm(alarmId));
   };
-  const clearAllAlarms=()=>{
+  const clearAllAlarms = () => {
     console.log("clear");
-    
-    dispatch(clearAllAlarmHistory())
-  }
+
+    dispatch(clearAllAlarmHistory());
+  };
   return (
     <Box
       sx={{
@@ -158,7 +163,11 @@ const AlarmClock = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {" "}
-          CLEAR ALL ALARMS <MdDelete onClick={()=>clearAllAlarms()}  style={{ fontSize: "25px" }} />
+          CLEAR ALL ALARMS{" "}
+          <MdDelete
+            onClick={() => clearAllAlarms()}
+            style={{ fontSize: "25px" }}
+          />
         </Box>
       </Box>
       <Box
@@ -204,6 +213,7 @@ const AlarmClock = () => {
       <AnchorTemporaryDrawer visible={drawerVisible} />
 
       <Snackbar
+        style={{ backgroundColor: "red" }}
         open={openSnackbar}
         autoHideDuration={null}
         onClose={handleAlertClose}
