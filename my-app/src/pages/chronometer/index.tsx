@@ -6,6 +6,7 @@ import { List } from "@mui/material";
 import HistoryList from "./HistoryList";
 import { useDispatch } from "react-redux";
 import {
+  resetTime,
   setTimeHistoryAction,
   startTime,
 } from "../../store/features/clonometerSlice";
@@ -64,6 +65,7 @@ const Chronometer = () => {
     setRunning(false);
     setStep(1);
     setRound((prevRound) => prevRound + 1);
+     dispatch(resetTime())
   }, []);
 
   const addStep = useCallback(() => {
@@ -73,8 +75,8 @@ const Chronometer = () => {
   }, [time, step, round, dispatch]);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
-  const inputRef = useRef<any>("");
-  console.log("inputRef", inputRef);
+  // const inputRef = useRef<any>("");
+  // console.log("inputRef", inputRef);
 
   return (
     <>
@@ -150,7 +152,7 @@ const Chronometer = () => {
           />
         ))}
       </List>
-      <input type="text" ref={inputRef} />
+      {/* <input type="text" ref={inputRef} /> */}
     </>
   );
 };

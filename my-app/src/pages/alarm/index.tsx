@@ -22,14 +22,19 @@ const AlarmClock = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const alarms = useSelector(getAlarmHistory);
+  const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
+    id: alarm.id,
+    sound: alarm.sound,
+  }));
+
   const dispatch = useDispatch();
   const openDrawer = () => {
     setDrawerVisible((prev) => !prev);
   };
 
-  const playSound = () => {
+  const playSound = (soundUrl: string) => {
     if (!audio) {
-      const sound = new Audio("/sounds/alarm.mp3");
+      const sound = new Audio(soundUrl);
       sound.loop = true;
       sound.play();
       setAudio(sound);
@@ -82,9 +87,12 @@ const AlarmClock = () => {
         const timeDiff = alarmTime.getTime() - now.getTime();
         if (timeDiff > 0) {
           return setTimeout(() => {
+            const selectedSound = selectedSounds.find(
+              (sound) => sound.id === alarm.id
+            );
             setAlertMessage(`Alarm: ${alarm.time}`);
             setOpenSnackbar(true);
-            playSound();
+            playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
           }, timeDiff);
         }
       }
@@ -98,16 +106,19 @@ const AlarmClock = () => {
         }
       });
     };
-  }, [alarms, audio]);
+  }, [alarms, audio, selectedSounds]);
+
   const deleteTime = useCallback(
     (alarmId: string) => {
       dispatch(deleteAlarm(alarmId));
     },
     [dispatch]
   );
+
   const clearAllAlarms = () => {
     dispatch(clearAllAlarmHistory());
   };
+
   return (
     <Box
       sx={{
@@ -164,8 +175,7 @@ const AlarmClock = () => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-          {" "}
-          CLEAR ALL ALARMS{" "}
+          CLEAR ALL ALARMS
           <MdDelete
             onClick={() => clearAllAlarms()}
             style={{ fontSize: "25px" }}

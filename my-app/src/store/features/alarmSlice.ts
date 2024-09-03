@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IAlarmHistoryState {
-  alarmHistory: { id: string; time: string; note: string; isActive: boolean }[];
+  alarmHistory: {
+    id: string;
+    time: string;
+    note: string;
+    isActive: boolean;
+    sound: string;
+  }[];
 }
 
 const initialState: IAlarmHistoryState = {
@@ -13,10 +19,12 @@ export const alarmSlice = createSlice({
   initialState,
   reducers: {
     setAlarm: (state, action) => {
+      console.log(action.payload);
       state.alarmHistory = [...state.alarmHistory, action.payload];
     },
     startAlarm: () => {},
     toogleIsActive: (state, action) => {
+      console.log("TEST", action.payload.sound);
       const alarmId = action.payload.alarmId;
       state.alarmHistory = state.alarmHistory.map((alarm: any) =>
         alarm.id === alarmId

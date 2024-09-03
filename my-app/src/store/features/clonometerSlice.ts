@@ -20,21 +20,20 @@ export const timeHistorySlice = createSlice({
       action: PayloadAction<any>
     ) => {
       state.timeHistory = [...state.timeHistory, { ...action?.payload }];
-      console.log("timeHistory", state?.timeHistory);
     },
     resetTimeHistory: (state: ITimeHistoryState) => {
       state.timeHistory = [...initialState.timeHistory];
     },
     startTime: (state, action) => {
-      console.log("clonometer slice", action.payload);
-      // state.timeList = [...state.timeList, action.payload];
       state.timeList = { ...action.payload };
-      console.log(state.timeList);
+    },
+    resetTime: (state) => {
+      state.timeList = initialState.timeList;
     },
   },
 });
 
-export const { setTimeHistoryAction, resetTimeHistory, startTime } =
+export const { setTimeHistoryAction, resetTimeHistory, startTime, resetTime } =
   timeHistorySlice.actions;
 
 export default timeHistorySlice.reducer;
