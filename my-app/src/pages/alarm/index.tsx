@@ -24,7 +24,7 @@ const AlarmClock = () => {
   const alarms = useSelector(getAlarmHistory);
   const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
     id: alarm.id,
-    sound: alarm.sound,
+    sound: alarm.sound, // /sounds/alarm1.mp3
   }));
 
   const dispatch = useDispatch();

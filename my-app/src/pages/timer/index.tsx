@@ -1,30 +1,61 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DigitalTimer } from "./DigitalTimer";
-import DigitalTimerDrawer from "./DigitalTimerDrawer";
 import { DigitalStartButton } from "./DigitalStartButton";
+import { useDispatch } from "react-redux";
+import { setIsRunning, setTime } from "../../store/features/timerSlice";
+import { useSelector } from "react-redux";
+import { getTime, RootState } from "../../store";
+import AlertModal from "./DigitalModal";
 
 const Timer = () => {
-  const [time, setTime] = useState({ h: 0, m: 0, s: 0 });
-  const [isRunning, setIsRunning] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const time = useSelector(getTime);
+  const isRunning = useSelector<RootState>((state) => state.timer.isRunning);
+  const sound = "/sounds/timerSound.mp3";
+
+  const playSound = (soundUrl: string) => {
+    if (!audio) {
+      const sound = new Audio(soundUrl);
+      sound.loop = true;
+      sound.play();
+      setAudio(sound);
+    }
+  };
+
   const onChangeTime = (newValue: any) => {
     const obj = {
       h: newValue?.$H || 0,
       m: newValue?.$m || 0,
       s: newValue?.$s || 0,
     };
-    setTime(obj);
+    dispatch(setTime(obj));
   };
+
   const handleStart = () => {
-    setIsRunning(true);
+    dispatch(setIsRunning(true));
   };
-  console.log("time", time);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      setAudio(null);
+    }
+  };
+
+  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     if (!isRunning) return;
-    const countdown = setInterval(() => {
+    interval_id.current = setInterval(() => {
       let { h, m, s } = time;
       if (h === 0 && m === 0 && s === 0) {
-        clearInterval(countdown);
+        clearInterval(interval_id.current);
+        playSound(sound);
+        setModalOpen(true);
         return;
       }
       if (s > 0) {
@@ -37,22 +68,32 @@ const Timer = () => {
         m = 59;
         s = 59;
       }
-      setTime({ h, m, s });
+      dispatch(setTime({ h, m, s }));
     }, 1000);
-    return () => clearInterval(countdown);
-  }, [time, isRunning]);
+    return () => clearInterval(interval_id.current);
+  }, [time, isRunning, dispatch]);
+
   const { h, m, s } = time;
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
+
   return (
     <>
       <DigitalTimer onChangeTime={onChangeTime} />
       <DigitalStartButton handleStart={handleStart} />
 
-      <h1 style={{ color: "#fff" }}>
+      <h1
+        style={{
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "50px",
+        }}
+      >
         {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
       </h1>
-      {/* <DigitalTimerDrawer/> */}
-      {/* <button onClick={handleStart}>Basla</button> */}
+
+      <AlertModal open={modalOpen} handleClose={handleModalClose} />
     </>
   );
 };
