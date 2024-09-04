@@ -4,9 +4,14 @@ import { Modal, Button, Box, Typography } from "@mui/material";
 interface AlertModalProps {
   open: boolean;
   handleClose: () => void;
+  reStartTimer: () => void;
 }
 
-const AlertModal: React.FC<AlertModalProps> = ({ open, handleClose }) => {
+const AlertModal: React.FC<AlertModalProps> = ({
+  open,
+  handleClose,
+  reStartTimer,
+}) => {
   return (
     <Modal
       open={open}
@@ -48,6 +53,7 @@ const AlertModal: React.FC<AlertModalProps> = ({ open, handleClose }) => {
                 backgroundColor: "#005bb5",
               },
             }}
+            onClick={reStartTimer}
           >
             Yenile
           </Button>
@@ -65,7 +71,6 @@ const AlertModal: React.FC<AlertModalProps> = ({ open, handleClose }) => {
                 backgroundColor: "#bdbdbd",
               },
             }}
-            
           >
             Kapat
           </Button>

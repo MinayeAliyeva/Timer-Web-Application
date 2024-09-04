@@ -13,6 +13,7 @@ const Timer = () => {
   const dispatch = useDispatch();
   const time = useSelector(getTime);
   const isRunning = useSelector<RootState>((state) => state.timer.isRunning);
+  const initialTime = useRef(time);
   const sound = "/sounds/timerSound.mp3";
 
   const playSound = (soundUrl: string) => {
@@ -31,14 +32,18 @@ const Timer = () => {
       s: newValue?.$s || 0,
     };
     dispatch(setTime(obj));
+    initialTime.current = obj;
   };
 
   const handleStart = () => {
     dispatch(setIsRunning(true));
+    setModalOpen(false);
+    audio?.pause();
   };
 
   const handleModalClose = () => {
     setModalOpen(false);
+    // reStartTimer();
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
@@ -49,9 +54,9 @@ const Timer = () => {
   const interval_id = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
+    let { h, m, s } = time;
     if (!isRunning) return;
     interval_id.current = setInterval(() => {
-      let { h, m, s } = time;
       if (h === 0 && m === 0 && s === 0) {
         clearInterval(interval_id.current);
         playSound(sound);
@@ -73,6 +78,17 @@ const Timer = () => {
     return () => clearInterval(interval_id.current);
   }, [time, isRunning, dispatch]);
 
+  const reStartTimer = () => {
+    dispatch(setTime(initialTime.current));
+    dispatch(setIsRunning(true));
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      setAudio(null);
+    }
+    setModalOpen(false);
+  };
+
   const { h, m, s } = time;
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
@@ -93,7 +109,11 @@ const Timer = () => {
         {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
       </h1>
 
-      <AlertModal open={modalOpen} handleClose={handleModalClose} />
+      <AlertModal
+        open={modalOpen}
+        handleClose={handleModalClose}
+        reStartTimer={reStartTimer}
+      />
     </>
   );
 };
