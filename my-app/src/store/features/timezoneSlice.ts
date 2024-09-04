@@ -19,13 +19,17 @@ export const timeZoneSlice = createSlice({
       }
     },
     deleteCity: (state, action) => {
-      console.log('ac',action.payload);
-      
-      state.cities = state.cities.filter((city) => city.split('/')[1] !== action.payload);
+      console.log("ac", action.payload);
+      state.cities = state.cities.filter(
+        (city) => city.split("/")[1] !== action.payload
+      );
+    },
+    deleteAllTimes: (state) => {
+      state.cities = [...initialState.cities];
     },
   },
 });
 
-export const { setCity, deleteCity } = timeZoneSlice.actions;
+export const { setCity, deleteCity, deleteAllTimes } = timeZoneSlice.actions;
 
 export default timeZoneSlice.reducer;

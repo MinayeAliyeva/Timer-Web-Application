@@ -7,13 +7,14 @@ import { TTimeList } from "../../modules";
 import { getCurrentTime } from "../../shared/components/constants";
 import TimeDrawer from "../../shared/components/TimeDrawer";
 import { useDispatch } from "react-redux";
-import { deleteCity, setCity } from "../../store/features/timezoneSlice";
+import { deleteAllTimes, deleteCity, setCity } from "../../store/features/timezoneSlice";
 import { useSelector } from "react-redux";
 import { getCitiesSelector, RootState } from "../../store";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import Loading from "../../shared/components/Loading";
 import { IconButton } from "@mui/material";
+import { AiOutlineSortAscending } from "react-icons/ai";
 
 export default function TimeList() {
   const [timeList, setTimeList] = useState<TTimeList[]>([]);
@@ -64,8 +65,11 @@ export default function TimeList() {
     }
   };
   const deleteTimeZone = (city: string) => {
-    dispatch(deleteCity(city)); 
+    dispatch(deleteCity(city));
   };
+  const allDelete=()=>{
+    dispatch(deleteAllTimes())
+  }
   const displayedTimeList =
     filteredTimeList.length > 0 ? filteredTimeList : timeList;
 
@@ -111,6 +115,26 @@ export default function TimeList() {
             },
           }}
         />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            backgroundColor: "#FF9500",
+            color: "#fff",
+            fontWeight: "bold",
+            borderRadius: "12px",
+            padding: "5px 25px",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+            height: "30px",
+            cursor: "pointer",
+          }}
+          onClick={() => allDelete()}
+        >
+          <Typography sx={{ color: "#fff" }}>ALL DELETE</Typography>
+          <MdDelete style={{ color: "#fff" }} />
+        </Box>
+        <AiOutlineSortAscending style={{ color: "#fff", fontSize: "30px" }} />
       </Box>
       <TimeDrawer
         drawerOpen={drawerOpen}
@@ -174,7 +198,7 @@ export default function TimeList() {
                       {timeData.time}
                     </Typography>
                     <IconButton onClick={() => deleteTimeZone(timeData?.city)}>
-                      <MdDelete style={{ fontSize: "25px",color:'#fff' }} />
+                      <MdDelete style={{ fontSize: "25px", color: "#fff" }} />
                     </IconButton>
                   </Box>
                 </Box>
