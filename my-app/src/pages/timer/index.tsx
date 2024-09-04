@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DigitalTimer } from "./DigitalTimer";
+import DigitalTimerDrawer from "./DigitalTimerDrawer";
+import { DigitalStartButton } from "./DigitalStartButton";
 
 const Timer = () => {
   const [time, setTime] = useState({ h: 0, m: 0, s: 0 });
@@ -15,6 +17,7 @@ const Timer = () => {
   const handleStart = () => {
     setIsRunning(true);
   };
+  console.log("time", time);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -37,15 +40,19 @@ const Timer = () => {
       setTime({ h, m, s });
     }, 1000);
     return () => clearInterval(countdown);
-  }, [time,isRunning]);
-
+  }, [time, isRunning]);
+  const { h, m, s } = time;
+  const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
   return (
     <>
       <DigitalTimer onChangeTime={onChangeTime} />
-      <h1 style={{ background: "red", color: "#fff" }}>
-        {JSON.stringify(time)}
+      <DigitalStartButton handleStart={handleStart} />
+
+      <h1 style={{ color: "#fff" }}>
+        {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
       </h1>
-      <button onClick={handleStart}>Basla</button>
+      {/* <DigitalTimerDrawer/> */}
+      {/* <button onClick={handleStart}>Basla</button> */}
     </>
   );
 };
