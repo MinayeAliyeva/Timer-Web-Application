@@ -1,33 +1,32 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { MdBed } from "react-icons/md";
+import { MdBed, MdDelete } from "react-icons/md";
 import PlusIcon from "../../shared/icons/PlusIcon";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getAlarmHistory } from "../../store";
-import { MdDelete } from "react-icons/md";
-import { useDispatch } from "react-redux";
 import {
   clearAllAlarmHistory,
   deleteAlarm,
 } from "../../store/features/alarmSlice";
-import AlarmSnackBar from "./AlarmSnackBar";
 import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
+import AlarmModal from "./AlarmModal";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const alarms = useSelector(getAlarmHistory);
   const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
     id: alarm.id,
     sound: alarm.sound, // /sounds/alarm1.mp3
   }));
-
+  const ref = useRef();
   const dispatch = useDispatch();
+
   const openDrawer = () => {
     setDrawerVisible((prev) => !prev);
   };
@@ -41,8 +40,8 @@ const AlarmClock = () => {
     }
   };
 
-  const handleAlertClose = () => {
-    setOpenSnackbar(false);
+  const handleModalClose = () => {
+    setOpenModal(false);
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
@@ -91,7 +90,7 @@ const AlarmClock = () => {
               (sound) => sound.id === alarm.id
             );
             setAlertMessage(`Alarm: ${alarm.time}`);
-            setOpenSnackbar(true);
+            setOpenModal(true);
             playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
           }, timeDiff);
         }
@@ -119,6 +118,13 @@ const AlarmClock = () => {
     dispatch(clearAllAlarmHistory());
   };
 
+  const doLater = () => {
+    console.log("alarms", alarms);
+    if(alertMessage){
+      console.log("alertMessage",alertMessage);
+      
+    }
+  };
   return (
     <Box
       sx={{
@@ -195,10 +201,12 @@ const AlarmClock = () => {
       </Box>
 
       <AnchorTemporaryDrawer visible={drawerVisible} />
-      <AlarmSnackBar
-        handleAlertClose={handleAlertClose}
-        openSnackbar={openSnackbar}
-        alertMessage={alertMessage}
+
+      <AlarmModal
+        open={openModal}
+        message={alertMessage}
+        onClose={handleModalClose}
+        doLater={doLater}
       />
     </Box>
   );
