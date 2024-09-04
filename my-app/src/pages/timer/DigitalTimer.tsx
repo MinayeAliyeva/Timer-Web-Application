@@ -3,32 +3,42 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MultiSectionDigitalClock } from "@mui/x-date-pickers/MultiSectionDigitalClock";
 import { FC } from "react";
+import { Box } from "@mui/material";
 
 interface IProps {
-  onChangeTime?: (value: any,  option: any) => void;
+  onChangeTime?: (value: any, option: any) => void;
 }
 
-export const DigitalTimer: FC<IProps> = ({onChangeTime}) => {
-
+export const DigitalTimer: FC<IProps> = ({ onChangeTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer
-        sx={{ backgroundColor: "#fff" }}
-        components={[
-          "MultiSectionDigitalClock",
-          "MultiSectionDigitalClock",
-          "MultiSectionDigitalClock",
-        ]}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#fff",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "10px 5px 5px #607d8b75",
+        }}
       >
-        <DemoItem label={'"hours", "minutes" and "seconds"'}>
-          <MultiSectionDigitalClock
-            // value={timeRef.current}
-            onChange={onChangeTime}
-            views={["hours", "minutes", "seconds"]}
-            ampm={false}
-          />
-        </DemoItem>
-      </DemoContainer>
+        <DemoContainer
+          components={[
+            "MultiSectionDigitalClock",
+            "MultiSectionDigitalClock",
+            "MultiSectionDigitalClock",
+          ]}
+        >
+          <DemoItem sx={{ textAlign: "center" }} label={"Saat    //Dakika    //  Saniye"}>
+            <MultiSectionDigitalClock
+              onChange={onChangeTime}
+              views={["hours", "minutes", "seconds"]}
+              ampm={false}
+            />
+          </DemoItem>
+        </DemoContainer>
+      </Box>
     </LocalizationProvider>
   );
 };
