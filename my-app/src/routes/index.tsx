@@ -2,7 +2,7 @@ import { useRoutes } from "react-router-dom";
 import MainLayout from "../shared/layout/MainLayout";
 import AlarmClock from "../pages/alarm";
 import Chronometer from "../pages/chronometer";
-import Counter from "../pages/counter";
+import Counter from "../pages/timer";
 import TimeZones from "../pages/timezone";
 import { MyRouterObject } from "../modules";
 import TestRef from "../test/TestRef";
