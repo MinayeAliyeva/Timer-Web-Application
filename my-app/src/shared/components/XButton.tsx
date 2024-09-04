@@ -4,7 +4,7 @@ import { FC } from "react";
 interface IProps {
   handleStart: () => void;
 }
-export const DigitalStartButton: FC<IProps> = ({ handleStart }) => {
+export const XButton: FC<IProps> = ({ handleStart }) => {
   return (
     <Stack
       sx={{

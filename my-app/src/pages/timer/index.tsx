@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { DigitalTimer } from "./DigitalTimer";
-import { DigitalStartButton } from "./DigitalStartButton";
+import { XButton } from "../../shared/components/XButton";
 import { useDispatch } from "react-redux";
-import { setIsRunning, setTime } from "../../store/features/timerSlice";
+import { setTime } from "../../store/features/timerSlice";
 import { useSelector } from "react-redux";
-import { getTime, RootState } from "../../store";
+import { getTimeSelector } from "../../store";
 import AlertModal from "./DigitalModal";
+
+const sound = "/sounds/timerSound.mp3";
 
 const Timer = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
-  const time = useSelector(getTime);
-  const isRunning = useSelector<RootState>((state) => state.timer.isRunning);
+  const time = useSelector(getTimeSelector);
+  let { h, m, s } = time;
   const initialTime = useRef(time);
-  const sound = "/sounds/timerSound.mp3";
-
+  const [running, setRunning] = useState(false);
   const playSound = (soundUrl: string) => {
     if (!audio) {
       const sound = new Audio(soundUrl);
@@ -36,66 +37,67 @@ const Timer = () => {
   };
 
   const handleStart = () => {
-    dispatch(setIsRunning(true));
-    setModalOpen(false);
-    audio?.pause();
+    if (h === 0 && m === 0 && s === 0) return;
+    setRunning((prevRunning) => !prevRunning);
   };
 
   const handleModalClose = () => {
     setModalOpen(false);
-    // reStartTimer();
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-      setAudio(null);
-    }
   };
 
   const interval_id = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
-    let { h, m, s } = time;
-    if (!isRunning) return;
-    interval_id.current = setInterval(() => {
-      if (h === 0 && m === 0 && s === 0) {
-        clearInterval(interval_id.current);
-        playSound(sound);
-        setModalOpen(true);
-        return;
-      }
-      if (s > 0) {
-        s--;
-      } else if (m > 0) {
-        m--;
-        s = 59;
-      } else if (h > 0) {
-        h--;
-        m = 59;
-        s = 59;
-      }
-      dispatch(setTime({ h, m, s }));
-    }, 1000);
-    return () => clearInterval(interval_id.current);
-  }, [time, isRunning, dispatch]);
+    if (running) {
+      interval_id.current = setInterval(() => {
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(interval_id.current);
+          setRunning(false);
+          setModalOpen(true);
+        }
+        if (s > 0) {
+          s--;
+        }
+        if (m > 0 && s === 0) {
+          m--;
+          s = 59;
+        }
+        if (h > 0 && m === 0) {
+          h--;
+          m = 59;
+          s = 59;
+        }
+
+        dispatch(setTime({ h, m, s }));
+      }, 1000);
+    } else {
+      clearInterval(interval_id.current);
+    }
+  }, [running]);
+
+  useEffect(() => {
+    if (modalOpen) {
+      playSound(sound);
+    } else {
+      audio?.pause();
+      setAudio(null);
+
+      console.log("modal", modalOpen);
+    }
+  }, [modalOpen]);
 
   const reStartTimer = () => {
-    dispatch(setTime(initialTime.current));
-    dispatch(setIsRunning(true));
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-      setAudio(null);
-    }
     setModalOpen(false);
+    setRunning(true);
+    dispatch(setTime(initialTime.current));
   };
 
-  const { h, m, s } = time;
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
   return (
     <>
       <DigitalTimer onChangeTime={onChangeTime} />
-      <DigitalStartButton handleStart={handleStart} />
+      <XButton handleStart={handleStart} />
 
       <h1
         style={{

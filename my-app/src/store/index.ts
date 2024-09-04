@@ -24,4 +24,4 @@ export const getTimeHistorySelector = (state: RootState) =>
   state?.clonometer.timeHistory;
 //Alarm timeHistoryActionSlice selector
 export const getAlarmHistory = (state: RootState) => state?.alarm.alarmHistory;
-export const getTime = (state: RootState) => state.timer.time;
+export const getTimeSelector = (state: RootState) => state.timer.time;
