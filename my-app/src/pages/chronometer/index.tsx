@@ -36,11 +36,6 @@ const Chronometer = () => {
           min++;
           sec = 0;
         }
-        console.log("{ min, sec, ms }", {
-          min,
-          sec,
-          ms,
-        });
         dispatch(
           startTime({
             min,

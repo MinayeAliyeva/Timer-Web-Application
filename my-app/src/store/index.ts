@@ -3,6 +3,7 @@ import timeZoneSlice from "./features/timezoneSlice";
 import timeHistorySlice from "./features/clonometerSlice";
 import alarmSlice from "./features/alarmSlice";
 import testSlice from "./features/testSlice";
+import timerSlice from "./features/timerSlice";
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     clonometer: timeHistorySlice,
     alarm: alarmSlice,
     test: testSlice,
+    timer: timerSlice,
   },
 });
 
@@ -22,3 +24,4 @@ export const getTimeHistorySelector = (state: RootState) =>
   state?.clonometer.timeHistory;
 //Alarm timeHistoryActionSlice selector
 export const getAlarmHistory = (state: RootState) => state?.alarm.alarmHistory;
+export const getTime = (state: RootState) => state.timer.time;
