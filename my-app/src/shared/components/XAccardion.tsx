@@ -3,10 +3,19 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
+import { MdDelete } from "react-icons/md";
+import { Box, IconButton } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { resetRound } from "../../store/features/clonometerSlice";
 
 export const XAccordion = ({ data }: any) => {
-  console.log("data", Object.entries(data));
   const keyValue = Object.entries(data);
+  const dispatch = useDispatch();
+  console.log("keyValue", keyValue);
+
+  const deleteRound = (roundNumber: number) => {
+    dispatch(resetRound(roundNumber));
+  };
 
   return (
     <div>
@@ -17,7 +26,12 @@ export const XAccordion = ({ data }: any) => {
             aria-controls={`panel${index}-content`}
             id={`panel${index}-header`}
           >
-            <Typography variant="h6">{item[0]}</Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="h6">Round: {item[0]}</Typography>
+              <IconButton onClick={() => deleteRound(Number(item[0]))}>
+                <MdDelete style={{ fontSize: "25px", textAlign: "center" }} />
+              </IconButton>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>
             {item[1].map((obj: any, i: number) => (
