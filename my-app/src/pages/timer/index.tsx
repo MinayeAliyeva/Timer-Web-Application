@@ -128,11 +128,14 @@ const Timer = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           marginTop: "80px",
           padding: "20px",
           borderRadius: "16px",
           backgroundColor: "#1d1d1d",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
+          width: "400px",
+          margin: "auto",
         }}
       >
         <Typography

@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button"; // MUI Button bileşenini ekleyin
 import { MdBed, MdDelete } from "react-icons/md";
 import PlusIcon from "../../shared/icons/PlusIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -189,13 +190,33 @@ const AlarmClock = () => {
                 fontWeight: "bold",
                 fontSize: "25px",
                 marginRight: "5px",
+                color: "#fff", // Turuncu renk
               }}
             />
-            <Typography style={{ fontWeight: "bold", fontSize: "25px" }}>
+            <Typography style={{ fontWeight: "bold", fontSize: "25px", color: "#fff" }}>
               Uyku Zamani
             </Typography>
           </Box>
         </Box>
+        <Button
+          onClick={() => clearAllAlarms()}
+          variant="contained"
+          color="warning"
+          sx={{
+            backgroundColor: "#FF9500", // Turuncu arka plan
+            color: "#fff",
+            fontWeight: "bold",
+            textTransform: "none",
+            borderRadius: "5px",
+            padding: "5px 15px",
+            "&:hover": {
+              backgroundColor: "#e68900", // Daha koyu turuncu hover durumu
+            }
+          }}
+          startIcon={<MdDelete />}
+        >
+          CLEAR ALL ALARMS
+        </Button>
         <PlusIcon onClick={openDrawer} />
       </Box>
       <Box
@@ -204,15 +225,7 @@ const AlarmClock = () => {
           alignItems: "center",
           justifyContent: "space-between",
         }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-          CLEAR ALL ALARMS
-          <MdDelete
-            onClick={() => clearAllAlarms()}
-            style={{ fontSize: "25px" }}
-          />
-        </Box>
-      </Box>
+      ></Box>
       <Box
         sx={{
           overflowY: "auto",
