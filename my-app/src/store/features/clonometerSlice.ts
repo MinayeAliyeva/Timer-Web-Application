@@ -30,27 +30,15 @@ export const timeHistorySlice = createSlice({
     resetTime: (state) => {
       state.timeList = initialState.timeList;
     },
+ 
   },
 });
 
-export const { setTimeHistoryAction, resetTimeHistory, startTime, resetTime } =
-  timeHistorySlice.actions;
+export const {
+  setTimeHistoryAction,
+  resetTimeHistory,
+  startTime,
+  resetTime,
+} = timeHistorySlice.actions;
 
 export default timeHistorySlice.reducer;
-// if (running) {
-// let { min, sec, ms } = prevTime;
-//......
-// } else {
-// console.log("PAUSE", running);
-// setTime({ min: 0, sec: 0, ms: 0 });
-// return () => {
-//   if (intervalId) {
-//     clearInterval(intervalId);
-//   }
-// };
-// }
-// return () => {
-//   if (intervalId) {
-//     clearInterval(intervalId);
-//   }
-// };

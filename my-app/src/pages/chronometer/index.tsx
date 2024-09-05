@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { List } from "@mui/material";
-import HistoryList from "./HistoryList";
 import { useDispatch } from "react-redux";
 import {
   resetTime,
@@ -12,6 +10,8 @@ import {
 } from "../../store/features/clonometerSlice";
 import { useSelector } from "react-redux";
 import { getTimeHistorySelector, RootState } from "../../store";
+import { XAccordion } from "../../shared/components/XAccardion";
+
 const Chronometer = () => {
   const [running, setRunning] = useState(false);
   const [step, setStep] = useState(1);
@@ -23,7 +23,7 @@ const Chronometer = () => {
   ) as any;
   let { min, sec, ms } = time ?? { min: 0, sec: 0, ms: 0 };
 
-  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined); 
+  const interval_id = useRef<NodeJS.Timeout | undefined>(undefined);
   useEffect(() => {
     if (running) {
       interval_id.current = setInterval(() => {
@@ -43,7 +43,7 @@ const Chronometer = () => {
             ms,
           })
         );
-      }, 10);
+      }, 1000);
     } else {
       console.log("pause case");
       clearInterval(interval_id.current);
@@ -60,7 +60,7 @@ const Chronometer = () => {
     setRunning(false);
     setStep(1);
     setRound((prevRound) => prevRound + 1);
-     dispatch(resetTime())
+    dispatch(resetTime());
   }, []);
 
   const addStep = useCallback(() => {
@@ -70,8 +70,14 @@ const Chronometer = () => {
   }, [time, step, round, dispatch]);
 
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
-  // const inputRef = useRef<any>("");
-  // console.log("inputRef", inputRef);
+
+  const groupedData = timeHistory.reduce((result: any, item: any) => {
+    if (!result[item.round]) {
+      result[item.round] = [];
+    }
+    result[item.round].push(item);
+    return result;
+  }, {});
 
   return (
     <>
@@ -134,20 +140,7 @@ const Chronometer = () => {
           </Button>
         </Box>
       </Box>
-
-      <List sx={{ width: "100%", bgcolor: "#000", padding: "0" }}>
-        {timeHistory.map((time, index) => (
-          <HistoryList
-            key={index}
-            timeHistory={timeHistory}
-            time={time}
-            formatTime={formatTime}
-            index={index}
-            round={time.round}
-          />
-        ))}
-      </List>
-      {/* <input type="text" ref={inputRef} /> */}
+      <XAccordion data={groupedData} />
     </>
   );
 };
