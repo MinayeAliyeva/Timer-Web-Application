@@ -18,9 +18,20 @@ export const XAccordion = ({ data }: any) => {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: 'center',
+        maxHeight: '80vh', // Maksimum yüksekliği belirler
+        overflowY: 'auto', // Dikey kaydırma çubuğu ekler
+        width: '100%', // Box genişliği, ihtiyaçlarınıza göre ayarlayabilirsiniz
+        padding: '10px' // Box içindeki boşluk
+      }}
+    >
       {keyValue.map((item: any, index: number) => (
-        <Accordion key={index}>
+        <Accordion sx={{ margin: "10px", width: "600px" }} key={index}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`panel${index}-content`}
@@ -47,6 +58,6 @@ export const XAccordion = ({ data }: any) => {
           </AccordionDetails>
         </Accordion>
       ))}
-    </div>
+    </Box>
   );
 };

@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 export default function Header() {
   return (
@@ -7,30 +6,10 @@ export default function Header() {
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around", // Butonları uçlara koyar
-        padding: "10px 20px", // İç kenar boşluğu ekler
-        backgroundColor: "#000", // Arka plan siyah
+        justifyContent: "space-around", 
+        padding: "10px 20px", 
+        backgroundColor: "#000",
       }}
-    >
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          color: "#FF9500", // Turuncu renk
-        }}
-      >
-        Düzenle
-      </Typography>
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          color: "#fff", // Beyaz renk
-        }}
-      >
-        Saatler
-      </Typography>
-   
-    </Box>
+    ></Box>
   );
 }
