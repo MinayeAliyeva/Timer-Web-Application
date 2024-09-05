@@ -3,8 +3,9 @@ import Button from "@mui/material/Button";
 import { FC } from "react";
 interface IProps {
   handleStart: () => void;
+  setDrawerOpen: (arg: boolean) => void;
 }
-export const XButton: FC<IProps> = ({ handleStart }) => {
+export const XButton: FC<IProps> = ({ handleStart, setDrawerOpen }) => {
   return (
     <Stack
       sx={{
@@ -18,7 +19,10 @@ export const XButton: FC<IProps> = ({ handleStart }) => {
       direction="row"
     >
       <Button
-        onClick={handleStart}
+        onClick={() => {
+          handleStart();
+          setDrawerOpen(false);
+        }}
         sx={{
           width: "90px",
           height: "90px",
