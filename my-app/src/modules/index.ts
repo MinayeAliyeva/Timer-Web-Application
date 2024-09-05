@@ -24,3 +24,9 @@ export interface ITimeHistory {
   sec: number;
   step?: number;
 }
+export interface ITime {
+  h: number;
+  m: number;
+  s: number;
+  id?: string;
+}

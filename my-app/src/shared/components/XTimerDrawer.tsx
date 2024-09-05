@@ -6,7 +6,8 @@ const XTimerDrawer = ({
   drawerOpen,
   toggleDrawer,
   onChangeTime,
-  handleStart
+  handleStart,
+  setDrawerOpen
 }: any) => {
   return (
     <Drawer
@@ -16,22 +17,25 @@ const XTimerDrawer = ({
       sx={{
         "& .MuiDrawer-paper": {
           borderRadius: "16px 16px 0 0",
-          padding: 2,
-          backgroundColor: "#fff",
-          boxShadow: "0px -4px 16px rgba(0, 0, 0, 0.2)",
+          padding: 3, 
+          backgroundColor: "#f7f7f7", 
+          boxShadow: "0px -4px 16px rgba(0, 0, 0, 0.1)", 
         },
       }}
     >
       <Box
         sx={{
-          width: 300,
+          width: "100%", 
+          maxWidth: 400, 
+          margin: "0 auto", 
           display: "flex",
           flexDirection: "column",
-          gap: 1,
+          alignItems: "center", 
+          gap: 2,
         }}
       >
         <DigitalTimer onChangeTime={onChangeTime} />
-        <XButton handleStart={handleStart} />
+        <XButton setDrawerOpen={setDrawerOpen} handleStart={handleStart} />
       </Box>
     </Drawer>
   );
