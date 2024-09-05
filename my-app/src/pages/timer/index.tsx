@@ -6,12 +6,16 @@ import { setTime } from "../../store/features/timerSlice";
 import { useSelector } from "react-redux";
 import { getTimeSelector } from "../../store";
 import AlertModal from "./DigitalModal";
-
+import XTimerDrawer from "../../shared/components/XTimerDrawer";
+import PlusIcon from "../../shared/icons/PlusIcon";
+import AddButton from "./AddButton";
+import { Box } from "@mui/material";
 const sound = "/sounds/timerSound.mp3";
 
 const Timer = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const dispatch = useDispatch();
   const time = useSelector(getTimeSelector);
   let { h, m, s } = time;
@@ -37,6 +41,7 @@ const Timer = () => {
   };
 
   const handleStart = () => {
+    setDrawerOpen(true);
     if (h === 0 && m === 0 && s === 0) return;
     setRunning((prevRunning) => !prevRunning);
   };
@@ -92,29 +97,38 @@ const Timer = () => {
     dispatch(setTime(initialTime.current));
   };
 
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
+
   const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
   return (
     <>
-      <DigitalTimer onChangeTime={onChangeTime} />
-      <XButton handleStart={handleStart} />
-
-      <h1
-        style={{
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "50px",
-        }}
-      >
-        {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
-      </h1>
-
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <h1
+          style={{
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "50px",
+          }}
+        >
+          {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
+        </h1>
+        <AddButton handleStart={handleStart} />
+      </Box>
       <AlertModal
         open={modalOpen}
         handleClose={handleModalClose}
         reStartTimer={reStartTimer}
+      />
+      <XTimerDrawer
+        handleStart={handleStart}
+        onChangeTime={onChangeTime}
+        drawerOpen={drawerOpen}
+        toggleDrawer={toggleDrawer}
       />
     </>
   );

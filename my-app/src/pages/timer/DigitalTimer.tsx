@@ -17,10 +17,11 @@ export const DigitalTimer: FC<IProps> = ({ onChangeTime }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#fff",
+          color: "#000",
           padding: "20px",
           borderRadius: "8px",
           boxShadow: "10px 5px 5px #607d8b75",
+       
         }}
       >
         <DemoContainer

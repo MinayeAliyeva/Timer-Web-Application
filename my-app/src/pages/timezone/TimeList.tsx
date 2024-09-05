@@ -5,9 +5,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { TTimeList } from "../../modules";
 import { getCurrentTime } from "../../shared/components/constants";
-import TimeDrawer from "../../shared/components/TimeDrawer";
+import TimeDrawer from "../../shared/components/XTimeZoneDrawer";
 import { useDispatch } from "react-redux";
-import { deleteAllTimes, deleteCity, setCity } from "../../store/features/timezoneSlice";
+import {
+  deleteAllTimes,
+  deleteCity,
+  setCity,
+} from "../../store/features/timezoneSlice";
 import { useSelector } from "react-redux";
 import { getCitiesSelector, RootState } from "../../store";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
@@ -67,9 +71,9 @@ export default function TimeList() {
   const deleteTimeZone = (city: string) => {
     dispatch(deleteCity(city));
   };
-  const allDelete=()=>{
-    dispatch(deleteAllTimes())
-  }
+  const allDelete = () => {
+    dispatch(deleteAllTimes());
+  };
   const displayedTimeList =
     filteredTimeList.length > 0 ? filteredTimeList : timeList;
 

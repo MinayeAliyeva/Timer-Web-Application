@@ -1,7 +1,7 @@
 import { Box, Drawer, List, ListItem, Typography } from "@mui/material";
 import { timeZones } from "./constants";
 
-const TimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => {
+const XTimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => {
   return (
     <Drawer
       anchor="bottom"
@@ -50,4 +50,4 @@ const TimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => {
   );
 };
 
-export default TimeDrawer;
+export default XTimeDrawer;

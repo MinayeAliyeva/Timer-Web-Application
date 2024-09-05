@@ -43,7 +43,7 @@ const Chronometer = () => {
             ms,
           })
         );
-      }, 1000);
+      }, 10);
     } else {
       console.log("pause case");
       clearInterval(interval_id.current);
