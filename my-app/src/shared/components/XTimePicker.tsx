@@ -44,7 +44,7 @@ const XTimePicker = () => {
         time: formattedTime,
         note: note,
         isActive: true,
-        sound: sound ? `/sounds/${sound}` : null,
+        sound: sound ? `/sounds/${sound}` : "/sounds/alarm1.mp3",
         id: uid(),
       })
     );

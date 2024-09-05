@@ -9,6 +9,7 @@ import { getAlarmHistory } from "../../store";
 import {
   clearAllAlarmHistory,
   deleteAlarm,
+  updateAlarmTime,
 } from "../../store/features/alarmSlice";
 import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
@@ -119,12 +120,30 @@ const AlarmClock = () => {
   };
 
   const doLater = () => {
-    console.log("alarms", alarms);
-    if(alertMessage){
-      console.log("alertMessage",alertMessage);
-      
+    if (alertMessage) {
+      const findTime = alertMessage.split(":").slice(1, 3).join(":");
+      const alarmToUpdate = alarms.find((alarm) => {
+        return alarm.time.trim() === findTime.trim();
+      });
+      if (alarmToUpdate) {
+        const now = new Date();
+        const [hours, minutes] = alarmToUpdate.time.split(":").map(Number);
+        const alarmTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes
+        );
+        alarmTime.setMinutes(alarmTime.getMinutes() + 9);
+        const newTime = alarmTime.toTimeString().slice(0, 5);
+        dispatch(updateAlarmTime({ id: alarmToUpdate.id, newTime }));
+      } else {
+        console.log("Alarm bulunamadı.");
+      }
     }
   };
+
   return (
     <Box
       sx={{
@@ -196,7 +215,12 @@ const AlarmClock = () => {
         }}
       >
         {alarms.map((alarm, index) => (
-          <AlarmList deleteTime={deleteTime} alarm={alarm} index={index} />
+          <AlarmList
+            key={index}
+            deleteTime={deleteTime}
+            alarm={alarm}
+            index={index}
+          />
         ))}
       </Box>
 
