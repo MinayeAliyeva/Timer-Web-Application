@@ -120,6 +120,12 @@ const AlarmClock = () => {
   };
 
   const doLater = () => {
+    setOpenModal(false);
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      setAudio(null);
+    }
     if (alertMessage) {
       const findTime = alertMessage.split(":").slice(1, 3).join(":");
       const alarmToUpdate = alarms.find((alarm) => {
@@ -135,7 +141,7 @@ const AlarmClock = () => {
           hours,
           minutes
         );
-        alarmTime.setMinutes(alarmTime.getMinutes() + 9);
+        alarmTime.setMinutes(alarmTime.getMinutes() + 2);
         const newTime = alarmTime.toTimeString().slice(0, 5);
         dispatch(updateAlarmTime({ id: alarmToUpdate.id, newTime }));
       } else {
