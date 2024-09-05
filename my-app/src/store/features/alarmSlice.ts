@@ -19,7 +19,6 @@ export const alarmSlice = createSlice({
   initialState,
   reducers: {
     setAlarm: (state, action) => {
-      console.log(action.payload);
       state.alarmHistory = [...state.alarmHistory, action.payload];
     },
     startAlarm: () => {},
@@ -41,6 +40,13 @@ export const alarmSlice = createSlice({
     clearAllAlarmHistory: (state) => {
       state.alarmHistory = [...initialState.alarmHistory];
     },
+    updateAlarmTime: (state, action) => {
+      const { id, newTime } = action.payload;
+      console.log({ id, newTime });
+      state.alarmHistory = state.alarmHistory.map((alarm) =>
+        alarm.id === id ? { ...alarm, time: newTime } : alarm
+      );
+    },
   },
 });
 
@@ -50,6 +56,7 @@ export const {
   toogleIsActive,
   deleteAlarm,
   clearAllAlarmHistory,
+  updateAlarmTime,
 } = alarmSlice.actions;
 
 export default alarmSlice.reducer;
