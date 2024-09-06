@@ -1,5 +1,5 @@
 // IOSAlertModal.tsx
-import React from "react";
+import React, { memo } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
 
 interface IAlarmModalProps {
@@ -69,4 +69,4 @@ const AlarmModal: React.FC<IAlarmModalProps> = ({
   );
 };
 
-export default AlarmModal;
+export default memo(AlarmModal);

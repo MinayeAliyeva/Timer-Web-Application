@@ -1,5 +1,5 @@
 import { Box, ListItem, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 const DefaultClock = () => {
   const [time, setTime] = useState("");
@@ -54,4 +54,4 @@ const DefaultClock = () => {
   );
 };
 
-export default DefaultClock;
+export default memo(DefaultClock);

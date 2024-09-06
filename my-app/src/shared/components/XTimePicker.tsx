@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAlarm } from "../../store/features/alarmSlice";
 import { uid } from "uid";
@@ -90,4 +90,4 @@ const XTimePicker = () => {
   );
 };
 
-export default XTimePicker;
+export default memo(XTimePicker);

@@ -41,10 +41,10 @@ export const alarmSlice = createSlice({
       state.alarmHistory = [...initialState.alarmHistory];
     },
     updateAlarmTime: (state, action) => {
-      const { id, newTime } = action.payload;
-      console.log({ id, newTime });
+      const { id, newTime, isActive } = action.payload;
+      console.log("45 TEST",{ id, newTime,isActive });
       state.alarmHistory = state.alarmHistory.map((alarm) =>
-        alarm.id === id ? { ...alarm, time: newTime } : alarm
+        alarm.id === id ? { ...alarm, time: newTime, isActive } : alarm
       );
     },
   },

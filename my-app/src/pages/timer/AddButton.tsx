@@ -1,5 +1,6 @@
 import {  IconButton, Typography } from "@mui/material";
 import AlarmIcon from "@mui/icons-material/Alarm";
+import { memo } from "react";
 
 const AddButton = ({handleStart}:any) => {
   return (
@@ -10,4 +11,4 @@ const AddButton = ({handleStart}:any) => {
   );
 };
 
-export default AddButton;
+export default memo(AddButton);

@@ -24,11 +24,9 @@ const AlarmClock = () => {
   const alarms = useSelector(getAlarmHistory);
   const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
     id: alarm.id,
-    sound: alarm.sound, // /sounds/alarm1.mp3
+    sound: alarm.sound, //sounds/alarm1.mp3
   }));
-  const ref = useRef();
   const dispatch = useDispatch();
-
   const openDrawer = () => {
     setDrawerVisible((prev) => !prev);
   };
@@ -49,12 +47,33 @@ const AlarmClock = () => {
       audio.currentTime = 0;
       setAudio(null);
     }
+    if (alertMessage) {
+      const findTime = alertMessage.split(":").slice(1, 3).join(":");
+      console.log("findTime", findTime);
+
+      const alarmToUpdate = alarms.find((alarm) => {
+        return alarm.time.trim() === findTime.trim();
+      });
+      console.log("alarmToUpdate", alarmToUpdate);
+
+      if (alarmToUpdate) {
+        dispatch(
+          updateAlarmTime({
+            id: alarmToUpdate.id,
+            isActive: false,
+            newTime: alarmToUpdate.time,
+          })
+        );
+      }
+    }
   };
 
   const updatePastAlarms = (alarms: IAlarm[]) => {
     return alarms.map((alarm: IAlarm) => {
+      console.log("ALARM TIME", alarm.time);
+
       const now = new Date();
-      const [hours, minutes] = alarm.time.split(":").map(Number);
+      const [hours, minutes] = alarm.time?.split(":").map(Number);
       const alarmTime = new Date(
         now.getFullYear(),
         now.getMonth(),
@@ -65,6 +84,7 @@ const AlarmClock = () => {
 
       if (alarmTime < now) {
         alarmTime.setDate(alarmTime.getDate() + 1);
+        console.log("Bu saat geçti, yarına ertelendi.");
       }
       const time = alarmTime.toTimeString().slice(0, 5);
       return { ...alarm, time };
@@ -91,6 +111,7 @@ const AlarmClock = () => {
             const selectedSound = selectedSounds.find(
               (sound) => sound.id === alarm.id
             );
+
             setAlertMessage(`Alarm: ${alarm.time}`);
             setOpenModal(true);
             playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
@@ -160,6 +181,7 @@ const AlarmClock = () => {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
+        position: "relative",
       }}
     >
       <Box
@@ -190,10 +212,12 @@ const AlarmClock = () => {
                 fontWeight: "bold",
                 fontSize: "25px",
                 marginRight: "5px",
-                color: "#fff", // Turuncu renk
+                color: "#fff",
               }}
             />
-            <Typography style={{ fontWeight: "bold", fontSize: "25px", color: "#fff" }}>
+            <Typography
+              style={{ fontWeight: "bold", fontSize: "25px", color: "#fff" }}
+            >
               Uyku Zamani
             </Typography>
           </Box>
@@ -203,15 +227,15 @@ const AlarmClock = () => {
           variant="contained"
           color="warning"
           sx={{
-            backgroundColor: "#FF9500", // Turuncu arka plan
+            backgroundColor: "#FF9500",
             color: "#fff",
             fontWeight: "bold",
             textTransform: "none",
             borderRadius: "5px",
             padding: "5px 15px",
             "&:hover": {
-              backgroundColor: "#e68900", // Daha koyu turuncu hover durumu
-            }
+              backgroundColor: "#e68900",
+            },
           }}
           startIcon={<MdDelete />}
         >
