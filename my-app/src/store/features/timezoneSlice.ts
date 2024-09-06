@@ -27,9 +27,25 @@ export const timeZoneSlice = createSlice({
     deleteAllTimes: (state) => {
       state.cities = [...initialState.cities];
     },
+    sortByTimeZoneNameAsc: (state) => {
+      state.cities = state.cities.sort((a, b) =>
+        a.split("/")[1].localeCompare(b.split("/")[1])
+      );
+    },
+    sortByTimeZoneNameDesc: (state) => {
+      state.cities = state.cities.sort((a, b) =>
+        b.split("/")[1].localeCompare(a.split("/")[1])
+      );
+    },
   },
 });
 
-export const { setCity, deleteCity, deleteAllTimes } = timeZoneSlice.actions;
+export const {
+  setCity,
+  deleteCity,
+  deleteAllTimes,
+  sortByTimeZoneNameAsc,
+  sortByTimeZoneNameDesc,
+} = timeZoneSlice.actions;
 
 export default timeZoneSlice.reducer;

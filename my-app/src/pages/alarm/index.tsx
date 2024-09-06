@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button"; // MUI Button bileşenini ekleyin
+import Button from "@mui/material/Button"; 
 import { MdBed, MdDelete } from "react-icons/md";
 import PlusIcon from "../../shared/icons/PlusIcon";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
 import { useSelector, useDispatch } from "react-redux";
 import { getAlarmHistory } from "../../store";
@@ -15,18 +15,21 @@ import {
 import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
 import AlarmModal from "./AlarmModal";
+import XNotification from "../../shared/components/XNotification";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [openNotification, setOpenNotification] = useState(false); // Notification state
   const alarms = useSelector(getAlarmHistory);
   const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
     id: alarm.id,
-    sound: alarm.sound, //sounds/alarm1.mp3
+    sound: alarm.sound, // sounds/alarm1.mp3
   }));
   const dispatch = useDispatch();
+
   const openDrawer = () => {
     setDrawerVisible((prev) => !prev);
   };
@@ -49,12 +52,10 @@ const AlarmClock = () => {
     }
     if (alertMessage) {
       const findTime = alertMessage.split(":").slice(1, 3).join(":");
-      console.log("findTime", findTime);
 
       const alarmToUpdate = alarms.find((alarm) => {
         return alarm.time.trim() === findTime.trim();
       });
-      console.log("alarmToUpdate", alarmToUpdate);
 
       if (alarmToUpdate) {
         dispatch(
@@ -70,8 +71,6 @@ const AlarmClock = () => {
 
   const updatePastAlarms = (alarms: IAlarm[]) => {
     return alarms.map((alarm: IAlarm) => {
-      console.log("ALARM TIME", alarm.time);
-
       const now = new Date();
       const [hours, minutes] = alarm.time?.split(":").map(Number);
       const alarmTime = new Date(
@@ -83,8 +82,9 @@ const AlarmClock = () => {
       );
 
       if (alarmTime < now) {
+        console.log("Bu saat geçti.");
+        setOpenNotification(true);
         alarmTime.setDate(alarmTime.getDate() + 1);
-        console.log("Bu saat geçti, yarına ertelendi.");
       }
       const time = alarmTime.toTimeString().slice(0, 5);
       return { ...alarm, time };
@@ -172,6 +172,14 @@ const AlarmClock = () => {
     }
   };
 
+  const handleNotificationClose = () => {
+    setOpenNotification(false); 
+  };
+
+  useEffect(() => {
+    console.log("openNotification state:", openNotification);
+  }, [openNotification]); 
+
   return (
     <Box
       sx={{
@@ -245,13 +253,6 @@ const AlarmClock = () => {
       </Box>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      ></Box>
-      <Box
-        sx={{
           overflowY: "auto",
           maxHeight: "calc(100vh - 150px)",
           width: "100%",
@@ -274,6 +275,10 @@ const AlarmClock = () => {
         message={alertMessage}
         onClose={handleModalClose}
         doLater={doLater}
+      />
+      <XNotification
+        open={openNotification}
+        onClose={handleNotificationClose}
       />
     </Box>
   );

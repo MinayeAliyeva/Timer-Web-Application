@@ -11,11 +11,14 @@ import {
   deleteAllTimes,
   deleteCity,
   setCity,
+  sortByTimeZoneNameAsc,
+  sortByTimeZoneNameDesc,
 } from "../../store/features/timezoneSlice";
 import { useSelector } from "react-redux";
 import { getCitiesSelector, RootState } from "../../store";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
+import { TbSortDescendingLetters } from "react-icons/tb";
 
 import { IconButton } from "@mui/material";
 import { AiOutlineSortAscending } from "react-icons/ai";
@@ -75,6 +78,13 @@ export default function TimeList() {
   const allDelete = () => {
     dispatch(deleteAllTimes());
   };
+  const sortByNameAsc = () => {
+    dispatch(sortByTimeZoneNameAsc());
+  };
+  const sortByNameDesc = () => {
+    dispatch(sortByTimeZoneNameDesc());
+  };
+
   const displayedTimeList =
     filteredTimeList.length > 0 ? filteredTimeList : timeList;
 
@@ -139,10 +149,16 @@ export default function TimeList() {
           <Typography sx={{ color: "#fff" }}>ALL DELETE</Typography>
           <MdDelete style={{ color: "#fff" }} />
         </Box>
-        <AiOutlineSortAscending
-          // onClick={sortByName}
-          style={{ color: "#fff", fontSize: "30px" }}
-        />
+        <Box sx={{ display: "flex" }}>
+          <AiOutlineSortAscending
+            onClick={sortByNameAsc}
+            style={{ color: "#fff", fontSize: "30px" }}
+          />
+          <TbSortDescendingLetters
+            style={{ color: "#fff", fontSize: "30px" }}
+            onClick={sortByNameDesc}
+          />
+        </Box>
       </Box>
       <TimeDrawer
         drawerOpen={drawerOpen}
