@@ -17,7 +17,14 @@ const formatTime = (date: Date) => {
   return `${hours}:${minutes}`;
 };
 
-const soundOptions = ["alarm1.mp3", "alarm2.mp3", "alarm3.mp3","alarm4.mp3"];
+const formatDate = (date: Date) => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Aylar 0'dan başlar
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
+};
+
+const soundOptions = ["alarm1.mp3", "alarm2.mp3", "alarm3.mp3", "alarm4.mp3"];
 
 const XTimePicker = () => {
   const dispatch = useDispatch();
@@ -27,10 +34,20 @@ const XTimePicker = () => {
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = e.target.value.split(":").map(Number);
-    const now = new Date();
-    now.setHours(hours);
-    now.setMinutes(minutes);
-    setTime(now);
+    const updatedTime = new Date(time);
+    updatedTime.setHours(hours);
+    updatedTime.setMinutes(minutes);
+    setTime(updatedTime);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [year, month, day] = e.target.value.split("-").map(Number);
+    console.log({ year, month, day });
+    const updatedDate = new Date(time);
+    updatedDate.setFullYear(year);
+    updatedDate.setMonth(month - 1); //aylar sifirdan baslayir deye 1 cixdim
+    updatedDate.setDate(day);
+    setTime(updatedDate);
   };
 
   const handleSoundChange = (e: SelectChangeEvent<string>) => {
@@ -39,8 +56,10 @@ const XTimePicker = () => {
 
   const handleAccept = () => {
     const formattedTime = formatTime(time);
+    const formattedDate = formatDate(time);
     dispatch(
       setAlarm({
+        date: formattedDate,
         time: formattedTime,
         note: note,
         isActive: true,
@@ -55,6 +74,13 @@ const XTimePicker = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
+      <TextField
+        label="Tarih"
+        variant="outlined"
+        type="date"
+        value={formatDate(time)}
+        onChange={handleDateChange}
+      />
       <TextField
         label="Saat"
         variant="outlined"

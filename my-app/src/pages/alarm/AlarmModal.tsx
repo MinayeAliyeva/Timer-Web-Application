@@ -1,4 +1,3 @@
-// IOSAlertModal.tsx
 import React, { memo } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
 

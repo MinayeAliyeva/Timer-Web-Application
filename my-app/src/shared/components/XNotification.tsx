@@ -8,14 +8,14 @@ interface INotificationProps {
 
 const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
   const handleResetAlarm = () => {
-    console.log("Modal open state before close:", open);
-    onClose(); 
+    console.log("XNotification Open", open);
+    onClose();
   };
 
   return (
     <Modal
       open={open}
-      onClose={onClose} 
+      onClose={onClose}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
@@ -48,7 +48,7 @@ const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleResetAlarm} 
+            onClick={handleResetAlarm}
           >
             Alarmı İptal Et
           </Button>
@@ -58,4 +58,4 @@ const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
   );
 };
 
-export default memo(XNotification);
+export default XNotification
