@@ -3,4 +3,5 @@ export interface IAlarm {
     note: string;
     isActive: boolean;
     id: string;
+    date:string
   }

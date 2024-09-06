@@ -7,6 +7,7 @@ export interface IAlarmHistoryState {
     note: string;
     isActive: boolean;
     sound: string;
+    date:string
   }[];
 }
 
@@ -20,6 +21,7 @@ export const alarmSlice = createSlice({
   reducers: {
     setAlarm: (state, action) => {
       state.alarmHistory = [...state.alarmHistory, action.payload];
+      console.log(" state.alarmHistory ", state.alarmHistory);
     },
     startAlarm: () => {},
     toogleIsActive: (state, action) => {
@@ -42,7 +44,7 @@ export const alarmSlice = createSlice({
     },
     updateAlarmTime: (state, action) => {
       const { id, newTime, isActive } = action.payload;
-      console.log("45 TEST",{ id, newTime,isActive });
+      console.log("45 TEST", { id, newTime, isActive });
       state.alarmHistory = state.alarmHistory.map((alarm) =>
         alarm.id === id ? { ...alarm, time: newTime, isActive } : alarm
       );
