@@ -1,11 +1,11 @@
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { FC } from "react";
+import { FC, memo } from "react";
 interface IProps {
   handleStart: () => void;
   setDrawerOpen: (arg: boolean) => void;
 }
-export const XButton: FC<IProps> = ({ handleStart, setDrawerOpen }) => {
+export const XButton: FC<IProps> = memo(({ handleStart, setDrawerOpen }) => {
   return (
     <Stack
       sx={{
@@ -36,4 +36,4 @@ export const XButton: FC<IProps> = ({ handleStart, setDrawerOpen }) => {
       </Button>
     </Stack>
   );
-};
+});

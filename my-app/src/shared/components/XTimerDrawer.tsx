@@ -1,6 +1,7 @@
 import { Box, Drawer } from "@mui/material";
 import { DigitalTimer } from "../../pages/timer/DigitalTimer";
 import { XButton } from "./XButton";
+import { memo } from "react";
 
 const XTimerDrawer = ({
   drawerOpen,
@@ -41,4 +42,4 @@ const XTimerDrawer = ({
   );
 };
 
-export default XTimerDrawer;
+export default memo(XTimerDrawer);

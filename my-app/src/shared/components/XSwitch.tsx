@@ -1,5 +1,5 @@
 import Switch from "@mui/material/Switch";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useDispatch } from "react-redux";
 import { toogleIsActive } from "../../store/features/alarmSlice";
 
@@ -25,8 +25,9 @@ const XSwitch: FC<IPropsSwitch> = ({
   const changeIsActive = () => {
     dispatch(toogleIsActive({ isActive, alarmId }));
   };
+  console.log("isActive SWITCH",isActive)
 
   return <Switch {...label} checked={isActive} onChange={changeIsActive} />;
 };
 
-export default XSwitch;
+export default memo(XSwitch);

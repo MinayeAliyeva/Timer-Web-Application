@@ -7,8 +7,9 @@ import { MdDelete } from "react-icons/md";
 import { Box, IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { resetRound } from "../../store/features/clonometerSlice";
+import { memo } from "react";
 
-export const XAccordion = ({ data }: any) => {
+export const XAccordion = memo(({ data }: any) => {
   const keyValue = Object.entries(data);
   const dispatch = useDispatch();
   console.log("keyValue", keyValue);
@@ -23,11 +24,11 @@ export const XAccordion = ({ data }: any) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: 'center',
-        maxHeight: '80vh', // Maksimum yüksekliği belirler
-        overflowY: 'auto', // Dikey kaydırma çubuğu ekler
-        width: '100%', // Box genişliği, ihtiyaçlarınıza göre ayarlayabilirsiniz
-        padding: '10px' // Box içindeki boşluk
+        justifyContent: "center",
+        maxHeight: "80vh", // Maksimum yüksekliği belirler
+        overflowY: "auto", // Dikey kaydırma çubuğu ekler
+        width: "100%", // Box genişliği, ihtiyaçlarınıza göre ayarlayabilirsiniz
+        padding: "10px", // Box içindeki boşluk
       }}
     >
       {keyValue.map((item: any, index: number) => (
@@ -60,4 +61,4 @@ export const XAccordion = ({ data }: any) => {
       ))}
     </Box>
   );
-};
+});

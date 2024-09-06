@@ -1,5 +1,6 @@
 import { Box, Drawer, List, ListItem, Typography } from "@mui/material";
 import { timeZones } from "./constants";
+import { memo } from "react";
 
 const XTimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => {
   return (
@@ -50,4 +51,4 @@ const XTimeDrawer = ({ drawerOpen, toggleDrawer, handleTimeZoneClick }: any) => 
   );
 };
 
-export default XTimeDrawer;
+export default memo(XTimeDrawer);

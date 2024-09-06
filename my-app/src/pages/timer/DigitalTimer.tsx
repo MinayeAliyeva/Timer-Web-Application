@@ -2,14 +2,14 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MultiSectionDigitalClock } from "@mui/x-date-pickers/MultiSectionDigitalClock";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { Box, Typography } from "@mui/material";
 
 interface IProps {
   onChangeTime?: (value: any, option: any) => void;
 }
 
-export const DigitalTimer: FC<IProps> = ({ onChangeTime }) => {
+export const DigitalTimer: FC<IProps> = memo(({ onChangeTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
@@ -38,11 +38,7 @@ export const DigitalTimer: FC<IProps> = ({ onChangeTime }) => {
         >
           Zamanlayıcı Ayarla
         </Typography>
-        <DemoContainer
-          components={[
-            "MultiSectionDigitalClock",
-          ]}
-        >
+        <DemoContainer components={["MultiSectionDigitalClock"]}>
           <DemoItem
             sx={{
               textAlign: "center",
@@ -63,10 +59,11 @@ export const DigitalTimer: FC<IProps> = ({ onChangeTime }) => {
                 fontSize: "1.5rem",
                 color: "#333",
               }}
+              timeSteps={{ hours: 1, seconds: 1, minutes: 1 }}
             />
           </DemoItem>
         </DemoContainer>
       </Box>
     </LocalizationProvider>
   );
-};
+});

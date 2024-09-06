@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Modal, Button, Box, Typography } from "@mui/material";
 
 interface AlertModalProps {
@@ -80,4 +80,4 @@ const AlertModal: React.FC<AlertModalProps> = ({
   );
 };
 
-export default AlertModal;
+export default memo(AlertModal);

@@ -16,9 +16,10 @@ import { useSelector } from "react-redux";
 import { getCitiesSelector, RootState } from "../../store";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
-import Loading from "../../shared/components/Loading";
+
 import { IconButton } from "@mui/material";
 import { AiOutlineSortAscending } from "react-icons/ai";
+import { Loading } from "../../shared/components/Loading";
 
 export default function TimeList() {
   const [timeList, setTimeList] = useState<TTimeList[]>([]);
@@ -138,7 +139,10 @@ export default function TimeList() {
           <Typography sx={{ color: "#fff" }}>ALL DELETE</Typography>
           <MdDelete style={{ color: "#fff" }} />
         </Box>
-        <AiOutlineSortAscending style={{ color: "#fff", fontSize: "30px" }} />
+        <AiOutlineSortAscending
+          // onClick={sortByName}
+          style={{ color: "#fff", fontSize: "30px" }}
+        />
       </Box>
       <TimeDrawer
         drawerOpen={drawerOpen}

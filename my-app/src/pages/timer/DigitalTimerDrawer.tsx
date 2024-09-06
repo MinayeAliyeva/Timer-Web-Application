@@ -2,11 +2,11 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-
+import { memo } from "react";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
-export default function DigitalTimerDrawer() {
+export const DigitalTimerDrawer = memo(() => {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -53,4 +53,4 @@ export default function DigitalTimerDrawer() {
       ))}
     </Box>
   );
-}
+});
