@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { getTimeHistorySelector, RootState } from "../../store";
 import { XAccordion } from "../../shared/components/XAccardion";
+import { formatTime } from "../../helpers";
 
 const Chronometer = () => {
   const [running, setRunning] = useState(false);
@@ -78,7 +79,6 @@ const Chronometer = () => {
     dispatch(setTimeHistoryAction({ ...time, step, round, createdDate }));
   }, [time, step, round, dispatch]);
 
-  const formatTime = (num: number) => (num < 10 ? `0${num}` : num);
 
   const groupedData = timeHistory.reduce((result: any, item: any) => {
     if (!result[item.round]) {
@@ -154,4 +154,4 @@ const Chronometer = () => {
   );
 };
 
-export default Chronometer;
+export default memo(Chronometer);

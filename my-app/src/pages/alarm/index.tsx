@@ -16,6 +16,11 @@ import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
 import AlarmModal from "./AlarmModal";
 import XNotification from "../../shared/components/XNotification";
+import {
+  closeAlarm,
+  getAlarmTimeDetails,
+  updatePastAlarms,
+} from "../../helpers";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -24,17 +29,16 @@ const AlarmClock = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [openNotification, setOpenNotification] = useState(false);
   const alarms = useSelector(getAlarmHistory);
-  console.log("alarms", alarms);
+  const dispatch = useDispatch();
 
   const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
     id: alarm.id,
     sound: alarm.sound, // sounds/alarm1.mp3
   }));
-  const dispatch = useDispatch();
 
   const openDrawer = useCallback(() => {
     setDrawerVisible((prev) => !prev);
-  }, [setDrawerVisible]);
+  }, []);
 
   const playSound = useCallback(
     (soundUrl: string) => {
@@ -50,17 +54,12 @@ const AlarmClock = () => {
 
   const handleModalClose = () => {
     setOpenModal(false);
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-      setAudio(null);
-    }
+    closeAlarm(audio, setAudio);
     if (alertMessage) {
       const findTime = alertMessage.split(":").slice(1, 3).join(":");
-      const alarmToUpdate = alarms.find((alarm) => {
-        return alarm.time.trim() === findTime.trim();
-      });
-
+      const alarmToUpdate = alarms.find(
+        (alarm) => alarm.time.trim() === findTime.trim()
+      );
       if (alarmToUpdate) {
         dispatch(
           updateAlarmTime({
@@ -73,31 +72,12 @@ const AlarmClock = () => {
     }
   };
 
-  const updatePastAlarms = (alarms: IAlarm[]) => {
-    return alarms.map((alarm: IAlarm) => {
-      const now = new Date();
-      const [hours, minutes] = alarm.time?.split(":").map(Number);
-      const { date } = alarm;
-      const [year, month, day] = date.split("-").map(Number);
-      const alarmTime = new Date(year, month - 1, day, hours, minutes);
-      if (alarmTime < now) {
-        alarmTime.setDate(alarmTime.getDate() + 1);
-      }
-      const time = alarmTime.toTimeString().slice(0, 5);
-      return { ...alarm, time };
-    });
-  };
-
   useEffect(() => {
     const updatedAlarms = updatePastAlarms(alarms);
     const timeouts = updatedAlarms.map((alarm: IAlarm) => {
       if (alarm.isActive) {
         const now = new Date();
-        const [hours, minutes] = alarm.time.split(":").map(Number);
-        const { date } = alarm;
-        const [year, month, day] = date.split("-").map(Number);
-        const alarmTime = new Date(year, month - 1, day, hours, minutes);
-      
+        const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
         const timeDiff = alarmTime.getTime() - now.getTime();
         if (timeDiff > 0) {
           return setTimeout(() => {
@@ -135,38 +115,28 @@ const AlarmClock = () => {
 
   const doLater = () => {
     setOpenModal(false);
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-      setAudio(null);
-    }
+    closeAlarm(audio, setAudio);
     if (alertMessage) {
       const findTime = alertMessage.split(":").slice(1, 3).join(":");
-      const alarmToUpdate = alarms.find((alarm) => {
-        return alarm.time.trim() === findTime.trim();
-      });
+      const alarmToUpdate = alarms.find(
+        (alarm) => alarm.time.trim() === findTime.trim()
+      );
       if (alarmToUpdate) {
-        const [hours, minutes] = alarmToUpdate.time.split(":").map(Number);
-        const { date } = alarmToUpdate;
-        const [year, month, day] = date.split("-").map(Number);
-        const alarmTime = new Date(year, month - 1, day, hours, minutes);
-     
+        const alarmTime = getAlarmTimeDetails(
+          alarmToUpdate.time,
+          alarmToUpdate.date
+        );
         alarmTime.setMinutes(alarmTime.getMinutes() + 2);
         const newTime = alarmTime.toTimeString().slice(0, 5);
-        console.log("newTime", newTime);
-
         dispatch(
           updateAlarmTime({ id: alarmToUpdate.id, newTime, isActive: true })
         );
-      } else {
-        console.log("Alarm bulunamadı.");
       }
     }
   };
 
   const handleNotificationClose = () => {
     setOpenNotification(false);
-    console.log("openNotificationFalse", openNotification);
   };
 
   return (
