@@ -1,20 +1,21 @@
-import { FC, memo } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
 
 interface INotificationProps {
   open: boolean;
-  onClose: () => void;
 }
 
-const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
-  const handleResetAlarm = () => {
-    console.log("XNotification Open", open);
-    onClose();
+const XNotification: FC<INotificationProps> = ({ open }) => {
+  const [state, setState] = useState<{ visible: boolean }>({ visible: false });
+  useEffect(() => {
+    setState({ ...state, visible: open });
+  }, [open]);
+  const onClose = () => {
+    setState({ ...state, visible: false });
   };
-
   return (
     <Modal
-      open={open}
+      open={state.visible}
       onClose={onClose}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
@@ -35,7 +36,7 @@ const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
         }}
       >
         <Typography id="modal-title" variant="h6" component="h2">
-          BU ALARMIN ZAMANI GEÇMİŞ
+          BU ALARMIN ZAMANI GEÇMİŞ YARINA AYARLANSINMI?
         </Typography>
         <Box
           sx={{
@@ -45,12 +46,11 @@ const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
             marginTop: 2,
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleResetAlarm}
-          >
-            Alarmı İptal Et
+          <Button variant="contained" color="primary" onClick={onClose}>
+            EVET
+          </Button>
+          <Button variant="contained" color="primary" onClick={onClose}>
+            HAYIR
           </Button>
         </Box>
       </Box>
@@ -58,4 +58,4 @@ const XNotification: FC<INotificationProps> = ({ open, onClose }) => {
   );
 };
 
-export default XNotification
+export default XNotification;

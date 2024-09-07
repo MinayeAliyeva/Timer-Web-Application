@@ -17,17 +17,7 @@ export const getAlarmTimeDetails = (time: string, date: string) => {
     }
   };
 
-  export const updatePastAlarms = (alarms: IAlarm[]) => {
-    return alarms.map((alarm: IAlarm) => {
-      const now = new Date();
-      const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
-      if (alarmTime < now) {
-        alarmTime.setDate(alarmTime.getDate() + 1);
-      }
-      const time = alarmTime.toTimeString().slice(0, 5);
-      return { ...alarm, time };
-    });
-  };
+
 
 
 
