@@ -16,11 +16,7 @@ import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
 import AlarmModal from "./AlarmModal";
 import XNotification from "../../shared/components/XNotification";
-import {
-  closeAlarm,
-  getAlarmTimeDetails,
-  updatePastAlarms,
-} from "../../helpers";
+import { closeAlarm, getAlarmTimeDetails } from "../../helpers";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -134,9 +130,21 @@ const AlarmClock = () => {
       }
     }
   };
-
-  const handleNotificationClose = () => {
-    setOpenNotification(false);
+  const updatePastAlarms = (alarms: IAlarm[]) => {
+    return alarms.map((alarm: IAlarm) => {
+      const now = new Date();
+      const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
+      if (alarmTime < now) {
+        setOpenNotification(true);
+        alarmTime.setDate(alarmTime.getDate() + 1);
+      }
+      const time = alarmTime.toTimeString().slice(0, 5);
+      return { ...alarm, time };
+    });
+  };
+  const handleNotificationClose = (isOpen: boolean = false) => {
+    console.log("isOpen", isOpen);
+    setOpenNotification(isOpen);
   };
 
   return (
@@ -226,9 +234,15 @@ const AlarmClock = () => {
           />
         ))}
       </Box>
-
-      <AnchorTemporaryDrawer visible={drawerVisible} />
-
+      <Box
+        sx={{
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 150px)",
+          width: "100%",
+        }}
+      >
+        <AnchorTemporaryDrawer visible={drawerVisible} />
+      </Box>
       <AlarmModal
         open={openModal}
         message={alertMessage}
@@ -237,7 +251,6 @@ const AlarmClock = () => {
       />
       <XNotification
         open={openNotification}
-        onClose={handleNotificationClose}
       />
     </Box>
   );

@@ -1,44 +1,52 @@
 import { useState, FC, useEffect, memo } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
+import XTimePicker from "./XTimePicker";
 import IconButton from "@mui/material/IconButton";
 import { VscChromeClose } from "react-icons/vsc";
-import XTimePicker from "./XTimePicker";
-
 type Anchor = "top" | "left" | "bottom" | "right";
 interface IPropsAnchor {
   anchor?: Anchor;
   visible?: boolean;
 }
 
+interface IState {
+  top: boolean;
+  left: boolean;
+  bottom: boolean;
+  right: boolean;
+  open?: boolean;
+}
 export const AnchorTemporaryDrawer: FC<IPropsAnchor> = memo(
   ({ anchor = "bottom", visible = false }) => {
-    const [state, setState] = useState({
+    const [state, setState] = useState<IState>({
       top: false,
       left: false,
       bottom: false,
       right: false,
+      open: false,
     });
 
     useEffect(() => {
-      setState((prevState) => ({ ...prevState, [anchor]: visible }));
+      setState((prevState) => ({ ...prevState, open: visible }));
     }, [visible, anchor]);
 
-    const closeDrawer = () => {
-      setState((prevState) => ({ ...prevState, [anchor]: false }));
+    const closeDrawer = (open: boolean) => {
+      setState((prevState) => ({ ...prevState, open }));
     };
 
     return (
       <Box>
         <Drawer
           anchor={anchor}
-          open={state[anchor]}
-          onClose={closeDrawer}
+          open={state.open}
+          // onClose={closeDrawer}
           PaperProps={{
             sx: {
               borderRadius: "10px",
               padding: "20px",
-              width: anchor === "left" || anchor === "right" ? "300px" : "100%",
+              width: "82%",
+              margin: "auto",
               height:
                 anchor === "top" || anchor === "bottom" ? "400px" : "100%",
               display: "flex",
@@ -48,9 +56,9 @@ export const AnchorTemporaryDrawer: FC<IPropsAnchor> = memo(
             },
           }}
         >
-          <XTimePicker />
+          <XTimePicker onCloseDrawer={closeDrawer} />
           <IconButton
-            onClick={closeDrawer}
+            onClick={() => closeDrawer(false)}
             sx={{
               position: "absolute",
               top: "10px",

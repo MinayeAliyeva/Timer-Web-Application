@@ -26,7 +26,11 @@ const formatDate = (date: Date) => {
 
 const soundOptions = ["alarm1.mp3", "alarm2.mp3", "alarm3.mp3", "alarm4.mp3"];
 
-const XTimePicker = () => {
+const XTimePicker = ({
+  onCloseDrawer
+}: {
+  onCloseDrawer: (arg: boolean) => void;
+}) => {
   const dispatch = useDispatch();
   const [time, setTime] = useState<Date>(new Date());
   const [note, setNote] = useState<string>("");
@@ -70,6 +74,7 @@ const XTimePicker = () => {
     setNote("");
     setTime(new Date());
     setSound("");
+    onCloseDrawer(false);
   };
 
   return (

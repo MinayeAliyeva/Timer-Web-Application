@@ -63,11 +63,11 @@ const Timer = () => {
     if (running) {
       interval_id.current = setInterval(() => {
         if (h === 0 && m === 0 && s === 0) {
-          clearInterval(interval_id.current);
           setRunning(false);
           setModalOpen(true);
           let { h, m, s }: any = initialTime.current;
           dispatch(setPrevTimes({ h, m, s }));
+          clearInterval(interval_id.current);
         }
         if (s > 0) {
           s--;
