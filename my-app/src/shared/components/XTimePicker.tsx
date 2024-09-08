@@ -28,7 +28,7 @@ const formatDate = (date: Date) => {
 const soundOptions = ["alarm1.mp3", "alarm2.mp3", "alarm3.mp3", "alarm4.mp3"];
 
 const XTimePicker = ({
-  onCloseDrawer
+  onCloseDrawer,
 }: {
   onCloseDrawer: (arg: boolean) => void;
 }) => {
@@ -72,7 +72,7 @@ const XTimePicker = ({
         isActive: true,
         sound: sound ? `/sounds/${sound}` : "/sounds/alarm1.mp3",
         id: uid(),
-        isPastTime: timeDiff < 0
+        isPastTime: timeDiff < 0,
       })
     );
     setNote("");

@@ -88,14 +88,12 @@ const AlarmClock = () => {
             playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
           }, timeDiff);
         } else {
-          console.log("past alarm", alarm);
           setOpenNotification(true);
           alarmTime.setDate(alarmTime.getDate() + 1);
         }
       }
       return null;
     });
-
     return () => {
       timeouts.forEach((timeoutId) => {
         if (timeoutId) {
@@ -103,7 +101,7 @@ const AlarmClock = () => {
         }
       });
     };
-  }, [alarms, audio, selectedSounds]);
+  }, [alarms]);
 
   const deleteTime = useCallback(
     (alarmId: string) => {
@@ -143,19 +141,22 @@ const AlarmClock = () => {
         updateAlarmTime({
           id: activeAlarm.id,
           isActive: false,
-          newTime: activeAlarm.time, 
+          newTime: activeAlarm.time,
         })
       );
-      setOpenNotification(false); 
-      setActiveAlarm(null); 
-    }
-  };
-  
 
+      setActiveAlarm(null);
+    }
+    setOpenNotification(false);
+  };
+  const onConfirm = () => {
+    
+    setOpenNotification(false);
+  };
+
+  console.log("notifitacion", openNotification);
   return (
-    <Box
-      sx={AlarmMainBoxStyle}
-    >
+    <Box sx={AlarmMainBoxStyle}>
       <Box
         sx={{
           display: "flex",
@@ -236,7 +237,7 @@ const AlarmClock = () => {
         onClose={handleModalClose}
         doLater={doLater}
       />
-      <XNotification open={openNotification} onCancel={onCancel} />
+    <XNotification onConfirm={onConfirm}   open={openNotification} onCancel={onCancel} />
     </Box>
   );
 };
