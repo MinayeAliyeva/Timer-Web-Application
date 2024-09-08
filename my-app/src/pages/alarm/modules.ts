@@ -4,4 +4,5 @@ export interface IAlarm {
     isActive: boolean;
     id: string;
     date:string
+    isPastTime:boolean
   }
