@@ -1,6 +1,7 @@
 import { Divider, ListItem, Typography } from "@mui/material";
 import { FC, memo } from "react";
-import { ITimeHistory, TypeTime, TypeTimeHistory } from "./modules";
+import { ITimeHistory, TypeTimeHistory } from "./modules";
+import { ClonometerListItemStyle } from "../../constands/style";
 
 interface IHistoryListProps {
   timeHistory: TypeTimeHistory[];
@@ -20,12 +21,7 @@ const HistoryList: FC<IHistoryListProps> = ({
   return (
     <>
       <ListItem
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px 20px",
-          color: "#fff",
-        }}
+        sx={ClonometerListItemStyle}
       >
         Round: {round}
         <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>

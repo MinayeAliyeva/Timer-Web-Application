@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
+import { NotificationBoxStyle } from "../../constands/style";
 
 interface INotificationProps {
   open: boolean;
@@ -23,19 +24,7 @@ const XNotification: FC<INotificationProps> = ({ open, onCancel }) => {
       aria-describedby="modal-description"
     >
       <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: "8px",
-          textAlign: "center",
-        }}
+        sx={NotificationBoxStyle}
       >
         <Typography id="modal-title" variant="h6" component="h2">
           BU ALARMIN ZAMANI GEÇMİŞ YARINA AYARLANSINMI?

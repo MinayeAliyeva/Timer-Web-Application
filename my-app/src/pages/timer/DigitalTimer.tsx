@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MultiSectionDigitalClock } from "@mui/x-date-pickers/MultiSectionDigitalClock";
 import { FC, memo } from "react";
 import { Box, Typography } from "@mui/material";
+import { DigitalTimerBoxStyle, MultiSectionDigitalClockStyle } from "../../constands/style";
 
 interface IProps {
   onChangeTime?: (value: any, option: any) => void;
@@ -13,20 +14,7 @@ export const DigitalTimer: FC<IProps> = memo(({ onChangeTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#f0f4f8",
-          color: "#333",
-          padding: "30px",
-          borderRadius: "16px",
-          boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.12)",
-          width: "100%",
-          maxWidth: "600px",
-          margin: "20px auto",
-        }}
+        sx={DigitalTimerBoxStyle}
       >
         <Typography
           variant="h4"
@@ -50,15 +38,7 @@ export const DigitalTimer: FC<IProps> = memo(({ onChangeTime }) => {
               onChange={onChangeTime}
               views={["hours", "minutes", "seconds"]}
               ampm={false}
-              sx={{
-                width: "100%",
-                backgroundColor: "#ffffff",
-                borderRadius: "12px",
-                padding: "20px",
-                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.08)",
-                fontSize: "1.5rem",
-                color: "#333",
-              }}
+              sx={MultiSectionDigitalClockStyle}
               timeSteps={{ hours: 1, seconds: 1, minutes: 1 }}
             />
           </DemoItem>

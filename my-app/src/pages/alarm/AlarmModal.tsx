@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { Button, Modal, Box, Typography } from "@mui/material";
+import { AlarmModalBoxStyle } from "../../constands/style";
 
 interface IAlarmModalProps {
   open: boolean;
@@ -22,19 +23,7 @@ const AlarmModal: React.FC<IAlarmModalProps> = ({
       aria-describedby="modal-description"
     >
       <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: "8px",
-          textAlign: "center",
-        }}
+        sx={AlarmModalBoxStyle}
       >
         <Typography id="modal-title" variant="h6" component="h2">
           {message}

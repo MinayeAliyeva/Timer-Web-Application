@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { Modal, Button, Box, Typography } from "@mui/material";
+import { DigitalModalBoxStyle, ModalButtonStyle } from "../../constands/style";
 
 interface AlertModalProps {
   open: boolean;
@@ -23,15 +24,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
       }}
     >
       <Box
-        sx={{
-          backgroundColor: "#f8f8f8",
-          padding: "20px",
-          borderRadius: "20px",
-          textAlign: "center",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          width: "80%",
-          maxWidth: "400px",
-        }}
+        sx={DigitalModalBoxStyle}
       >
         <Typography variant="h6" sx={{ mb: 2, color: "#333" }}>
           Zaman Doldu!
@@ -60,17 +53,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
           <Button
             variant="contained"
             onClick={handleClose}
-            sx={{
-              backgroundColor: "#e0e0e0",
-              color: "#333",
-              borderRadius: "15px",
-              padding: "10px 20px",
-              fontWeight: "bold",
-              boxShadow: "none",
-              "&:hover": {
-                backgroundColor: "#bdbdbd",
-              },
-            }}
+            sx={ModalButtonStyle}
           >
             Kapat
           </Button>
