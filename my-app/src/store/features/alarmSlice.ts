@@ -7,7 +7,8 @@ export interface IAlarmHistoryState {
     note: string;
     isActive: boolean;
     sound: string;
-    date:string
+    date: string;
+    isPastTime: boolean;
   }[];
 }
 
@@ -22,7 +23,6 @@ export const alarmSlice = createSlice({
     setAlarm: (state, action) => {
       state.alarmHistory = [...state.alarmHistory, action.payload];
     },
-    startAlarm: () => {},
     toogleIsActive: (state, action) => {
       const alarmId = action.payload.alarmId;
       state.alarmHistory = state.alarmHistory.map((alarm: any) =>
@@ -51,7 +51,6 @@ export const alarmSlice = createSlice({
 
 export const {
   setAlarm,
-  startAlarm,
   toogleIsActive,
   deleteAlarm,
   clearAllAlarmHistory,

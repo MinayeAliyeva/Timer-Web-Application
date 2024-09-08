@@ -24,6 +24,7 @@ const AlarmClock = () => {
   const [openModal, setOpenModal] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [openNotification, setOpenNotification] = useState(false);
+  const [activeAlarm, setActiveAlarm] = useState<IAlarm | null>(null);
   const alarms = useSelector(getAlarmHistory);
   const dispatch = useDispatch();
 
@@ -69,13 +70,14 @@ const AlarmClock = () => {
   };
 
   useEffect(() => {
-    const updatedAlarms = updatePastAlarms(alarms);
-    const timeouts = updatedAlarms.map((alarm: IAlarm) => {
+    const timeouts = alarms.map((alarm: IAlarm) => {
       if (alarm.isActive) {
         const now = new Date();
         const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
         const timeDiff = alarmTime.getTime() - now.getTime();
-        if (timeDiff > 0) {
+        setActiveAlarm(alarm);
+        if (!alarm.isPastTime) {
+          console.log("future alarms", alarm);
           return setTimeout(() => {
             const selectedSound = selectedSounds.find(
               (sound) => sound.id === alarm.id
@@ -84,6 +86,10 @@ const AlarmClock = () => {
             setOpenModal(true);
             playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
           }, timeDiff);
+        } else {
+          console.log("past alarm", alarm);
+          setOpenNotification(true);
+          alarmTime.setDate(alarmTime.getDate() + 1);
         }
       }
       return null;
@@ -97,6 +103,7 @@ const AlarmClock = () => {
       });
     };
   }, [alarms, audio, selectedSounds]);
+  // console.log("active Alarm", activeAlarm);
 
   const deleteTime = useCallback(
     (alarmId: string) => {
@@ -130,21 +137,20 @@ const AlarmClock = () => {
       }
     }
   };
-  const updatePastAlarms = (alarms: IAlarm[]) => {
-    return alarms.map((alarm: IAlarm) => {
-      const now = new Date();
-      const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
-      if (alarmTime < now) {
-        setOpenNotification(true);
-        alarmTime.setDate(alarmTime.getDate() + 1);
-      }
-      const time = alarmTime.toTimeString().slice(0, 5);
-      return { ...alarm, time };
-    });
+  const onCancel = () => {
+    if (activeAlarm) {
+      dispatch(
+        updateAlarmTime({
+          id: activeAlarm.id,
+          isActive: false,
+          newTime: activeAlarm.time, 
+        })
+      );
+      setOpenNotification(false); 
+      setActiveAlarm(null); 
+    }
   };
-  const handleNotificationClose = (isOpen: boolean = false) => {
-    setOpenNotification(isOpen);
-  };
+  
 
   return (
     <Box
@@ -248,9 +254,7 @@ const AlarmClock = () => {
         onClose={handleModalClose}
         doLater={doLater}
       />
-      <XNotification
-        open={openNotification}
-      />
+      <XNotification open={openNotification} onCancel={onCancel} />
     </Box>
   );
 };

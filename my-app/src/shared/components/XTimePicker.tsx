@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { getAlarmTimeDetails } from "../../helpers";
 
 const formatTime = (date: Date) => {
   const hours = date.getHours().toString().padStart(2, "0");
@@ -60,6 +61,9 @@ const XTimePicker = ({
   const handleAccept = () => {
     const formattedTime = formatTime(time);
     const formattedDate = formatDate(time);
+    const now = new Date();
+    const alarmTime = getAlarmTimeDetails(formattedTime, formattedDate);
+    const timeDiff = alarmTime.getTime() - now.getTime();
     dispatch(
       setAlarm({
         date: formattedDate,
@@ -68,6 +72,7 @@ const XTimePicker = ({
         isActive: true,
         sound: sound ? `/sounds/${sound}` : "/sounds/alarm1.mp3",
         id: uid(),
+        isPastTime: timeDiff < 0
       })
     );
     setNote("");

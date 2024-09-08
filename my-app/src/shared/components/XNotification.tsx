@@ -3,14 +3,16 @@ import { Button, Modal, Box, Typography } from "@mui/material";
 
 interface INotificationProps {
   open: boolean;
+  onCancel: () => void;
 }
 
-const XNotification: FC<INotificationProps> = ({ open }) => {
+const XNotification: FC<INotificationProps> = ({ open, onCancel }) => {
   const [state, setState] = useState<{ visible: boolean }>({ visible: false });
   useEffect(() => {
     setState({ ...state, visible: open });
   }, [open]);
   const onClose = () => {
+    console.log("modal close");
     setState({ ...state, visible: false });
   };
   return (
@@ -49,7 +51,14 @@ const XNotification: FC<INotificationProps> = ({ open }) => {
           <Button variant="contained" color="primary" onClick={onClose}>
             EVET
           </Button>
-          <Button variant="contained" color="primary" onClick={onClose}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              onCancel();
+              onClose();
+            }}
+          >
             HAYIR
           </Button>
         </Box>
