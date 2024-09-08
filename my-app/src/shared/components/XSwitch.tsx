@@ -25,7 +25,6 @@ const XSwitch: FC<IPropsSwitch> = ({
   const changeIsActive = () => {
     dispatch(toogleIsActive({ isActive, alarmId }));
   };
-  console.log("isActive SWITCH",isActive)
 
   return <Switch {...label} checked={isActive} onChange={changeIsActive} />;
 };

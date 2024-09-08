@@ -19,7 +19,6 @@ export const timeZoneSlice = createSlice({
       }
     },
     deleteCity: (state, action) => {
-      console.log("ac", action.payload);
       state.cities = state.cities.filter(
         (city) => city.split("/")[1] !== action.payload
       );

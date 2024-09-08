@@ -21,11 +21,9 @@ export const alarmSlice = createSlice({
   reducers: {
     setAlarm: (state, action) => {
       state.alarmHistory = [...state.alarmHistory, action.payload];
-      console.log(" state.alarmHistory ", state.alarmHistory);
     },
     startAlarm: () => {},
     toogleIsActive: (state, action) => {
-      console.log("TEST", action.payload.sound);
       const alarmId = action.payload.alarmId;
       state.alarmHistory = state.alarmHistory.map((alarm: any) =>
         alarm.id === alarmId
@@ -44,7 +42,6 @@ export const alarmSlice = createSlice({
     },
     updateAlarmTime: (state, action) => {
       const { id, newTime, isActive } = action.payload;
-      console.log("45 TEST", { id, newTime, isActive });
       state.alarmHistory = state.alarmHistory.map((alarm) =>
         alarm.id === id ? { ...alarm, time: newTime, isActive } : alarm
       );

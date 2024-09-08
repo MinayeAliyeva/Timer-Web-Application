@@ -17,7 +17,6 @@ interface IPropsAlarmList {
 }
 
 const AlarmList: FC<IPropsAlarmList> = ({ index, alarm, deleteTime }) => {
-  console.log("17ALARM", alarm);
 
   return (
     <Box

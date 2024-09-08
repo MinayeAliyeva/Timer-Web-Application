@@ -46,7 +46,6 @@ const Chronometer = () => {
         );
       }, 10);
     } else {
-      console.log("pause case");
       clearInterval(interval_id.current);
     }
   }, [running]);

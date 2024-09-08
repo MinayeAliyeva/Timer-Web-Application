@@ -46,7 +46,6 @@ const XTimePicker = ({
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [year, month, day] = e.target.value.split("-").map(Number);
-    console.log({ year, month, day });
     const updatedDate = new Date(time);
     updatedDate.setFullYear(year);
     updatedDate.setMonth(month - 1); //aylar sifirdan baslayir deye 1 cixdim

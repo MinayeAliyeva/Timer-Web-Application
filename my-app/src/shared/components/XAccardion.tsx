@@ -12,7 +12,6 @@ import { memo } from "react";
 export const XAccordion = memo(({ data }: any) => {
   const keyValue = Object.entries(data);
   const dispatch = useDispatch();
-  console.log("keyValue", keyValue);
 
   const deleteRound = (roundNumber: number) => {
     dispatch(resetRound(roundNumber));
