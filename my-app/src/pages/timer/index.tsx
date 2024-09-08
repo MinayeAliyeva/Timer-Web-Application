@@ -12,6 +12,7 @@ import {
   setIsRunning,
 } from "../../store/features/timerSlice";
 import { ITime } from "../../modules";
+import { DigitalBoxStyle, TimerBoxStyle, TypographyStyle } from "../../constands/style";
 
 
 
@@ -76,33 +77,10 @@ const Timer = () => {
   return (
     <>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: "80px",
-          padding: "20px",
-          borderRadius: "16px",
-          backgroundColor: "#1d1d1d",
-          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
-          width: "400px",
-          margin: "auto",
-        }}
+        sx={DigitalBoxStyle}
       >
         <Typography
-          sx={{
-            color: "#fff",
-            textAlign: "center",
-            fontSize: "72px",
-            fontWeight: "bold",
-            border: "2px solid #4caf50",
-            borderRadius: "16px",
-            padding: "20px",
-            width: "90%",
-            backgroundColor: "#212121",
-            boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.8)",
-          }}
+          sx={TypographyStyle}
         >
           {formatTime(h)}:{formatTime(m)}:{formatTime(s)}
         </Typography>
@@ -120,16 +98,7 @@ const Timer = () => {
           time.showHistory && (
             <Box
               key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "#282c34",
-                borderRadius: "8px",
-                padding: "10px 20px",
-                margin: "10px 0",
-                boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.3)",
-              }}
+              sx={TimerBoxStyle}
             >
               <Typography
                 sx={{

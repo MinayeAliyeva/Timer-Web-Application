@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { getTimeHistorySelector, RootState } from "../../store";
 import { XAccordion } from "../../shared/components/XAccardion";
 import { formatTime } from "../../helpers";
+import { ClonometerBoxStyle, ClonometerButtonStyle } from "../../constands/style";
 
 const Chronometer = () => {
   const [running, setRunning] = useState(false);
@@ -90,15 +91,7 @@ const Chronometer = () => {
   return (
     <>
       <Box
-        sx={{
-          padding: "20px",
-          backgroundColor: "#000",
-          color: "#fff",
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+        sx={ClonometerBoxStyle}
       >
         <Typography
           variant="h4"
@@ -133,13 +126,7 @@ const Chronometer = () => {
             {running ? "Pause" : "Start"}
           </Button>
           <Button
-            sx={{
-              borderRadius: "50%",
-              width: "100px",
-              height: "100px",
-              margin: "0 10px",
-              backgroundColor: "#FFC107",
-            }}
+            sx={ClonometerButtonStyle}
             variant="contained"
             onClick={running ? addStep : resetTimer}
             disabled={!running && timeHistory.length === 0}

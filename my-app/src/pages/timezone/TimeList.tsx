@@ -23,6 +23,7 @@ import { TbSortDescendingLetters } from "react-icons/tb";
 import { IconButton } from "@mui/material";
 import { AiOutlineSortAscending } from "react-icons/ai";
 import { Loading } from "../../shared/components/Loading";
+import { TimeListButtonStyle, TimerBoxContentStyle, TimerBoxStyle } from "../../constands/style";
 
 export default function TimeList() {
   const [timeList, setTimeList] = useState<TTimeList[]>([]);
@@ -98,16 +99,7 @@ export default function TimeList() {
       >
         <Button
           variant="contained"
-          sx={{
-            backgroundColor: "#FF9500",
-            color: "#fff",
-            fontWeight: "bold",
-            borderRadius: "12px",
-            padding: "10px 20px",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-            width: "300px",
-            margin: "0 5px",
-          }}
+          sx={TimeListButtonStyle}
           onClick={toggleDrawer(true)}
         >
           Zaman Dilimi Seç
@@ -129,19 +121,7 @@ export default function TimeList() {
           }}
         />
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "5px",
-            backgroundColor: "#FF9500",
-            color: "#fff",
-            fontWeight: "bold",
-            borderRadius: "12px",
-            padding: "5px 25px",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-            height: "30px",
-            cursor: "pointer",
-          }}
+          sx={TimerBoxContentStyle}
           onClick={() => allDelete()}
         >
           <Typography sx={{ color: "#fff" }}>ALL DELETE</Typography>

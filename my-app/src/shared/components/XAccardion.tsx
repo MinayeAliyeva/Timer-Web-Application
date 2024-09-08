@@ -8,6 +8,7 @@ import { Box, IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { resetRound } from "../../store/features/clonometerSlice";
 import { memo } from "react";
+import { XAccordionBoxStyle } from "../../constands/style";
 
 export const XAccordion = memo(({ data }: any) => {
   const keyValue = Object.entries(data);
@@ -19,16 +20,7 @@ export const XAccordion = memo(({ data }: any) => {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        maxHeight: "80vh", // Maksimum yüksekliği belirler
-        overflowY: "auto", // Dikey kaydırma çubuğu ekler
-        width: "100%", // Box genişliği, ihtiyaçlarınıza göre ayarlayabilirsiniz
-        padding: "10px", // Box içindeki boşluk
-      }}
+      sx={XAccordionBoxStyle}
     >
       {keyValue.map((item: any, index: number) => (
         <Accordion sx={{ margin: "10px", width: "600px" }} key={index}>

@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { MdBed, MdDelete } from "react-icons/md";
 import PlusIcon from "../../shared/icons/PlusIcon";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { AnchorTemporaryDrawer } from "../../shared/components/XDrawer";
 import { useSelector, useDispatch } from "react-redux";
 import { getAlarmHistory } from "../../store";
@@ -17,6 +17,7 @@ import { IAlarm } from "./modules";
 import AlarmModal from "./AlarmModal";
 import XNotification from "../../shared/components/XNotification";
 import { closeAlarm, getAlarmTimeDetails } from "../../helpers";
+import { AlarmButtonStyle, AlarmMainBoxStyle } from "../../constands/style";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -103,7 +104,6 @@ const AlarmClock = () => {
       });
     };
   }, [alarms, audio, selectedSounds]);
-  // console.log("active Alarm", activeAlarm);
 
   const deleteTime = useCallback(
     (alarmId: string) => {
@@ -154,15 +154,7 @@ const AlarmClock = () => {
 
   return (
     <Box
-      sx={{
-        padding: "50px 100px",
-        backgroundColor: "#000",
-        color: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        position: "relative",
-      }}
+      sx={AlarmMainBoxStyle}
     >
       <Box
         sx={{
@@ -206,17 +198,7 @@ const AlarmClock = () => {
           onClick={() => clearAllAlarms()}
           variant="contained"
           color="warning"
-          sx={{
-            backgroundColor: "#FF9500",
-            color: "#fff",
-            fontWeight: "bold",
-            textTransform: "none",
-            borderRadius: "5px",
-            padding: "5px 15px",
-            "&:hover": {
-              backgroundColor: "#e68900",
-            },
-          }}
+          sx={AlarmButtonStyle}
           startIcon={<MdDelete />}
         >
           CLEAR ALL ALARMS
@@ -259,4 +241,4 @@ const AlarmClock = () => {
   );
 };
 
-export default AlarmClock;
+export default memo(AlarmClock);

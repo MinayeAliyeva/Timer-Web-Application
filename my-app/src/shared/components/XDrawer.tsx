@@ -40,7 +40,6 @@ export const AnchorTemporaryDrawer: FC<IPropsAnchor> = memo(
         <Drawer
           anchor={anchor}
           open={state.open}
-          // onClose={closeDrawer}
           PaperProps={{
             sx: {
               borderRadius: "10px",
