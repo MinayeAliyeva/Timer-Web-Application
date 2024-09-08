@@ -3,8 +3,8 @@ import { Modal, Button, Box, Typography } from "@mui/material";
 
 interface AlertModalProps {
   open: boolean;
-  handleClose: () => void;
-  reStartTimer: () => void;
+  handleClose?: () => void;
+  reStartTimer?: () => void;
 }
 
 const AlertModal: React.FC<AlertModalProps> = ({

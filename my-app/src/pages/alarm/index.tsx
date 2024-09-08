@@ -143,7 +143,6 @@ const AlarmClock = () => {
     });
   };
   const handleNotificationClose = (isOpen: boolean = false) => {
-    console.log("isOpen", isOpen);
     setOpenNotification(isOpen);
   };
 

@@ -11,7 +11,7 @@ export interface IOptions {
 export type TTimeList = {
   city: string;
   time: string;
-  id:number
+  id: number;
 };
 export interface ITimzeZone {
   label: string;
@@ -29,4 +29,6 @@ export interface ITime {
   m: number;
   s: number;
   id?: string;
+  currentTime?: boolean;
+  showHistory?: boolean;
 }

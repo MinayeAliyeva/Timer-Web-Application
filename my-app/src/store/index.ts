@@ -25,4 +25,6 @@ export const getTimeHistorySelector = (state: RootState) =>
 //Alarm timeHistoryActionSlice selector
 export const getAlarmHistory = (state: RootState) => state?.alarm.alarmHistory;
 export const getTimeSelector = (state: RootState) => state.timer.time;
+export const getTimeRunningSelector = (state: RootState) =>
+  state.timer.isRunning;
 export const getPrevTimesSelector = (state: RootState) => state.timer.timeList;

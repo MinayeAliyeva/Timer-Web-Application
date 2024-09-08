@@ -33,7 +33,6 @@ export default function TimeList() {
   const timeZones: string[] = useSelector<RootState>(
     getCitiesSelector
   ) as string[];
-  console.log("cities", timeZones);
 
   const updateTimeList = useCallback(() => {
     const cityTimeZone: any = [];
@@ -47,7 +46,6 @@ export default function TimeList() {
   }, [timeZones]);
 
   const handleTimeZoneClick = (timeZone: string, cityName: string) => {
-    console.log({ timeZone, cityName });
     dispatch(setCity(cityName));
     setDrawerOpen(false);
   };
