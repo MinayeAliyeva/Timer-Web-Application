@@ -88,8 +88,9 @@ const AlarmClock = () => {
             playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
           }, timeDiff);
         } else {
-          setOpenNotification(true);
+          // setOpenNotification(true);
           alarmTime.setDate(alarmTime.getDate() + 1);
+        
         }
       }
       return null;
@@ -237,7 +238,7 @@ const AlarmClock = () => {
         onClose={handleModalClose}
         doLater={doLater}
       />
-    <XNotification onConfirm={onConfirm}   open={openNotification} onCancel={onCancel} />
+    {/* <XNotification onConfirm={onConfirm}   open={openNotification} onCancel={onCancel} /> */}
     </Box>
   );
 };
