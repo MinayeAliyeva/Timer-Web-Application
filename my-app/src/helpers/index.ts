@@ -1,4 +1,3 @@
-import { IAlarm } from "../pages/alarm/modules";
 
 export const getAlarmTimeDetails = (time: string, date: string) => {
     const [hours, minutes] = time.split(":").map(Number);

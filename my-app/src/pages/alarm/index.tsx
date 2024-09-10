@@ -14,95 +14,20 @@ import {
 } from "../../store/features/alarmSlice";
 import AlarmList from "./AlarmList";
 import { IAlarm } from "./modules";
-import AlarmModal from "./AlarmModal";
 import XNotification from "../../shared/components/XNotification";
-import { closeAlarm, getAlarmTimeDetails } from "../../helpers";
 import { AlarmButtonStyle, AlarmMainBoxStyle } from "../../constands/style";
+import { getAlarmTimeDetails } from "../../helpers";
 
 const AlarmClock = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [openNotification, setOpenNotification] = useState(false);
   const [activeAlarm, setActiveAlarm] = useState<IAlarm | null>(null);
   const alarms = useSelector(getAlarmHistory);
   const dispatch = useDispatch();
 
-  const selectedSounds = useSelector(getAlarmHistory).map((alarm) => ({
-    id: alarm.id,
-    sound: alarm.sound, // sounds/alarm1.mp3
-  }));
-
   const openDrawer = useCallback(() => {
-    setDrawerVisible((prev) => !prev);
+    setDrawerVisible(true);
   }, []);
-
-  const playSound = useCallback(
-    (soundUrl: string) => {
-      if (!audio) {
-        const sound = new Audio(soundUrl);
-        sound.loop = true;
-        sound.play();
-        setAudio(sound);
-      }
-    },
-    [audio]
-  );
-
-  const handleModalClose = () => {
-    setOpenModal(false);
-    closeAlarm(audio, setAudio);
-    if (alertMessage) {
-      const findTime = alertMessage.split(":").slice(1, 3).join(":");
-      const alarmToUpdate = alarms.find(
-        (alarm) => alarm.time.trim() === findTime.trim()
-      );
-      if (alarmToUpdate) {
-        dispatch(
-          updateAlarmTime({
-            id: alarmToUpdate.id,
-            isActive: false,
-            newTime: alarmToUpdate.time,
-          })
-        );
-      }
-    }
-  };
-
-  useEffect(() => {
-    const timeouts = alarms.map((alarm: IAlarm) => {
-      if (alarm.isActive) {
-        const now = new Date();
-        const alarmTime = getAlarmTimeDetails(alarm.time, alarm.date);
-        const timeDiff = alarmTime.getTime() - now.getTime();
-        setActiveAlarm(alarm);
-        if (!alarm.isPastTime) {
-          console.log("future alarms", alarm);
-          return setTimeout(() => {
-            const selectedSound = selectedSounds.find(
-              (sound) => sound.id === alarm.id
-            );
-            setAlertMessage(`Alarm: ${alarm.time}`);
-            setOpenModal(true);
-            playSound(selectedSound?.sound || "/sounds/defaultAlarm.mp3");
-          }, timeDiff);
-        } else {
-          // setOpenNotification(true);
-          alarmTime.setDate(alarmTime.getDate() + 1);
-        
-        }
-      }
-      return null;
-    });
-    return () => {
-      timeouts.forEach((timeoutId) => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-      });
-    };
-  }, [alarms]);
 
   const deleteTime = useCallback(
     (alarmId: string) => {
@@ -115,47 +40,35 @@ const AlarmClock = () => {
     dispatch(clearAllAlarmHistory());
   };
 
-  const doLater = () => {
-    setOpenModal(false);
-    closeAlarm(audio, setAudio);
-    if (alertMessage) {
-      const findTime = alertMessage.split(":").slice(1, 3).join(":");
-      const alarmToUpdate = alarms.find(
-        (alarm) => alarm.time.trim() === findTime.trim()
-      );
-      if (alarmToUpdate) {
-        const alarmTime = getAlarmTimeDetails(
-          alarmToUpdate.time,
-          alarmToUpdate.date
-        );
-        alarmTime.setMinutes(alarmTime.getMinutes() + 2);
-        const newTime = alarmTime.toTimeString().slice(0, 5);
-        dispatch(
-          updateAlarmTime({ id: alarmToUpdate.id, newTime, isActive: true })
-        );
-      }
-    }
-  };
   const onCancel = () => {
-    if (activeAlarm) {
-      dispatch(
-        updateAlarmTime({
-          id: activeAlarm.id,
-          isActive: false,
-          newTime: activeAlarm.time,
-        })
-      );
-
-      setActiveAlarm(null);
-    }
+    console.log("activeAlarm", activeAlarm);
+    dispatch(deleteAlarm(alarms[alarms.length - 1].id));
     setOpenNotification(false);
   };
   const onConfirm = () => {
-    
     setOpenNotification(false);
   };
 
-  console.log("notifitacion", openNotification);
+  useEffect(() => {
+    if (!drawerVisible && alarms.length) {
+      // console.log("open xnotfication");
+      // console.log("alarm sonuncu", alarms[alarms.length - 1]);
+      const now = new Date();
+      const currentlyALarmTime = getAlarmTimeDetails(
+        alarms[alarms.length - 1]?.time,
+        alarms[alarms.length - 1]?.date
+      );
+      const timeDiff = currentlyALarmTime.getTime() - now.getTime();
+      if (timeDiff < 0 && alarms[alarms.length - 1]?.isActive) {
+        setOpenNotification(true);
+      }
+    }
+  }, [drawerVisible]);
+
+  const closeDrawer = () => {
+    setDrawerVisible(false);
+  };
+  console.log("drawerVisible", drawerVisible);
   return (
     <Box sx={AlarmMainBoxStyle}>
       <Box
@@ -230,15 +143,17 @@ const AlarmClock = () => {
           width: "100%",
         }}
       >
-        <AnchorTemporaryDrawer visible={drawerVisible} />
+        <AnchorTemporaryDrawer
+          closeDrawer={closeDrawer}
+          visible={drawerVisible}
+        />
       </Box>
-      <AlarmModal
-        open={openModal}
-        message={alertMessage}
-        onClose={handleModalClose}
-        doLater={doLater}
+
+      <XNotification
+        onConfirm={onConfirm}
+        open={openNotification}
+        onCancel={onCancel}
       />
-    {/* <XNotification onConfirm={onConfirm}   open={openNotification} onCancel={onCancel} /> */}
     </Box>
   );
 };

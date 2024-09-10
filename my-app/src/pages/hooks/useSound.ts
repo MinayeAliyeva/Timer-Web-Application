@@ -37,7 +37,6 @@ export const useSound: IUseSound = () => {
 
   const reStartTimer = () => {
     const findTimer = timeList?.find((time) => time.currentTime);
-    console.log("FIND",findTimer);
     
     if (findTimer) {
       dispatch(setTime({ ...findTimer, currentTime: false }));

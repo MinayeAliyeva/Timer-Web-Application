@@ -4,9 +4,9 @@ import { AlarmModalBoxStyle } from "../../constands/style";
 
 interface IAlarmModalProps {
   open: boolean;
-  message: string | null;
-  onClose: () => void;
-  doLater: () => void;
+  message?: string | null;
+  onClose?: () => void;
+  doLater?: () => void;
 }
 
 const AlarmModal: React.FC<IAlarmModalProps> = ({

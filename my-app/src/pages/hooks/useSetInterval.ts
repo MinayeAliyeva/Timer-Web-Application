@@ -15,11 +15,8 @@ export const useSetInterval = () => {
   let timeList = useSelector(getPrevTimesSelector);
 
   const dispatch = useDispatch();
-  console.log({time});
-  console.log({timeList});
   
   let { h, m, s } = time;
-  console.log("time", time);
 
   useEffect(() => {
     if (isRunning) {

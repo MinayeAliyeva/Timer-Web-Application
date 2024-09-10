@@ -16,7 +16,6 @@ const XNotification: FC<INotificationProps> = ({
   const [state, setState] = useState<{ visible: boolean }>({ visible: false });
 
   useEffect(() => {
-    console.log("open useeff", open);
     setState({ ...state, visible: open });
   }, [open]);
   
@@ -24,8 +23,6 @@ const XNotification: FC<INotificationProps> = ({
     setState({ ...state, visible: false });
     onCancel();
   };
-  console.log("visible", state.visible);
-  console.log("open", open);
 
   return (
     <Modal
