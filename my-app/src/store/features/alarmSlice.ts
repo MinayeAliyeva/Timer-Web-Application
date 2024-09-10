@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface IAlarmHistory {
+  id: string;
+  time: string;
+  note: string;
+  isActive: boolean;
+  sound: string;
+  date: string;
+  isPastTime: boolean;
+}
 export interface IAlarmHistoryState {
-  alarmHistory: {
-    id: string;
-    time: string;
-    note: string;
-    isActive: boolean;
-    sound: string;
-    date: string;
-    isPastTime: boolean;
-  }[];
+  alarmHistory: IAlarmHistory[];
+  openAlarmModal?: boolean;
+  activeAlarm?: IAlarmHistory;
 }
 
 const initialState: IAlarmHistoryState = {
@@ -17,11 +20,15 @@ const initialState: IAlarmHistoryState = {
 };
 
 export const alarmSlice = createSlice({
-  name: "clonometer",
+  name: "alarm",
   initialState,
   reducers: {
     setAlarm: (state, action) => {
       state.alarmHistory = [...state.alarmHistory, action.payload];
+      // console.log("ALARM SLICE", );
+    },
+    setActiveAlarm:(state, action)=>{
+      state.activeAlarm = action.payload;
     },
     toogleIsActive: (state, action) => {
       const alarmId = action.payload.alarmId;
@@ -46,6 +53,9 @@ export const alarmSlice = createSlice({
         alarm.id === id ? { ...alarm, time: newTime, isActive } : alarm
       );
     },
+    setOpenAlarmModal: (state, action) => {
+      state.openAlarmModal = action.payload;
+    },
   },
 });
 
@@ -55,6 +65,8 @@ export const {
   deleteAlarm,
   clearAllAlarmHistory,
   updateAlarmTime,
+  setOpenAlarmModal,
+  setActiveAlarm
 } = alarmSlice.actions;
 
 export default alarmSlice.reducer;

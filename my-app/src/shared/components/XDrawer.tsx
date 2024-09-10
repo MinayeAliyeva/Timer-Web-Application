@@ -8,6 +8,11 @@ type Anchor = "top" | "left" | "bottom" | "right";
 interface IPropsAnchor {
   anchor?: Anchor;
   visible?: boolean;
+  closeDrawer: () => void;
+  top?: false;
+  left?: false;
+  bottom?: false;
+  right?: false;
 }
 
 interface IState {
@@ -18,28 +23,20 @@ interface IState {
   open?: boolean;
 }
 export const AnchorTemporaryDrawer: FC<IPropsAnchor> = memo(
-  ({ anchor = "bottom", visible = false }) => {
-    const [state, setState] = useState<IState>({
-      top: false,
-      left: false,
-      bottom: false,
-      right: false,
-      open: false,
-    });
+  ({ anchor = "bottom", visible = false, bottom = false, closeDrawer }) => {
+    // 1 + click visible = true
+    // useEffect(() => {
+    //   setState((prevState) => ({ ...prevState, open: visible }));
+    //   // state.open = true visible=true
+    // }, [visible, anchor]);
 
-    useEffect(() => {
-      setState((prevState) => ({ ...prevState, open: visible }));
-    }, [visible, anchor]);
-
-    const closeDrawer = (open: boolean) => {
-      setState((prevState) => ({ ...prevState, open }));
-    };
+    // open = false
 
     return (
       <Box>
         <Drawer
           anchor={anchor}
-          open={state.open}
+          open={visible}
           PaperProps={{
             sx: {
               borderRadius: "10px",
@@ -57,7 +54,7 @@ export const AnchorTemporaryDrawer: FC<IPropsAnchor> = memo(
         >
           <XTimePicker onCloseDrawer={closeDrawer} />
           <IconButton
-            onClick={() => closeDrawer(false)}
+            onClick={closeDrawer}
             sx={{
               position: "absolute",
               top: "10px",
