@@ -58,17 +58,20 @@ const XTimePicker = ({
     setSound(e.target.value as string);
   };
 
-
   const handleAccept = () => {
     const formattedTime = formatTime(time);
     const formattedDate = formatDate(time);
-    
+
     const dateParts = formattedDate.split("-");
-    if (dateParts[2]?.length === 2 && dateParts[1]?.length === 2 && dateParts[0]?.length === 4) {
+    if (
+      dateParts[2]?.length === 2 &&
+      dateParts[1]?.length === 2 &&
+      dateParts[0]?.length === 4
+    ) {
       const now = new Date();
       const alarmTime = getAlarmTimeDetails(formattedTime, formattedDate);
       const timeDiff = alarmTime.getTime() - now.getTime();
-      
+
       dispatch(
         setAlarm({
           date: formattedDate,
@@ -85,7 +88,7 @@ const XTimePicker = ({
       setSound("");
       onCloseDrawer(false);
     } else {
-  
+      return;
     }
   };
 
